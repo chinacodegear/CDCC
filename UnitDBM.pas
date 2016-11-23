@@ -6,15 +6,36 @@ uses
   System.SysUtils, System.Classes, DBXDevartSQLServer, Data.DB, Data.SqlExpr, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
   FireDAC.Phys, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.VCLUI.Wait, FireDAC.Phys.MSSQLDef,
-  FireDAC.Phys.ODBCBase, FireDAC.Phys.MSSQL, FireDAC.Comp.UI, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+  FireDAC.Phys.ODBCBase, FireDAC.Phys.MSSQL, FireDAC.Comp.UI, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Data.DBXMSSQL;
 
 type
   TDM = class(TDataModule)
     GeoDBC: TSQLConnection;
     FDConn: TFDConnection;
-    FDQuery1: TFDQuery;
+    FDQuick: TFDQuery;
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
     FDPhysMSSQLDriverLink1: TFDPhysMSSQLDriverLink;
+    FDQuery: TFDQuery;
+    FDQ00: TFDQuery;
+    DS00: TDataSource;
+    FDQ01: TFDQuery;
+    DS01: TDataSource;
+    FDQ01DeviceName: TStringField;
+    FDQ01DeviceCount: TIntegerField;
+    FDQ01DeviceType: TStringField;
+    FDQ01DeviceStatus: TStringField;
+    FDQ13: TFDQuery;
+    DS13: TDataSource;
+    FDQ02: TFDQuery;
+    DS02: TDataSource;
+    FDQ02PayDate: TDateField;
+    FDQ02FeeBegin: TDateField;
+    FDQ02FeeEnd: TDateField;
+    FDQ02Dues: TBCDField;
+    FDQ02PaidFee: TBCDField;
+    FDQ02Payee: TStringField;
+    FDQ02Recorder: TStringField;
+    FDQ02Memo: TStringField;
     procedure GeoDBCBeforeConnect(Sender: TObject);
     procedure FDConnBeforeConnect(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);
