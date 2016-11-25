@@ -6,7 +6,8 @@ uses
   System.SysUtils, System.Classes, DBXDevartSQLServer, Data.DB, Data.SqlExpr, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
   FireDAC.Phys, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.VCLUI.Wait, FireDAC.Phys.MSSQLDef,
-  FireDAC.Phys.ODBCBase, FireDAC.Phys.MSSQL, FireDAC.Comp.UI, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Data.DBXMSSQL;
+  FireDAC.Phys.ODBCBase, FireDAC.Phys.MSSQL, FireDAC.Comp.UI, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Data.DBXMSSQL,
+  FireDAC.VCLUI.Async;
 
 type
   TDM = class(TDataModule)
@@ -36,6 +37,7 @@ type
     FDQ02Payee: TStringField;
     FDQ02Recorder: TStringField;
     FDQ02Memo: TStringField;
+    FDGUIxAsyncExecuteDialog1: TFDGUIxAsyncExecuteDialog;
     procedure GeoDBCBeforeConnect(Sender: TObject);
     procedure FDConnBeforeConnect(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);

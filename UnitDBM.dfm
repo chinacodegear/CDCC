@@ -29,10 +29,12 @@ object DM: TDM
       'Password=masterkey'
       'Server=localhost'
       'DriverID=MSSQL')
+    ResourceOptions.AssignedValues = [rvCmdExecMode]
+    Connected = True
     LoginPrompt = False
     BeforeConnect = FDConnBeforeConnect
     Left = 106
-    Top = 26
+    Top = 25
   end
   object FDQuick: TFDQuery
     Connection = FDConn
@@ -103,8 +105,8 @@ object DM: TDM
   end
   object DS00: TDataSource
     DataSet = FDQ00
-    Left = 230
-    Top = 153
+    Left = 232
+    Top = 166
   end
   object FDQ01: TFDQuery
     Connection = FDConn
@@ -152,8 +154,8 @@ object DM: TDM
   end
   object DS01: TDataSource
     DataSet = FDQ01
-    Left = 306
-    Top = 155
+    Left = 310
+    Top = 162
   end
   object FDQ13: TFDQuery
     Connection = FDConn
@@ -166,7 +168,7 @@ object DM: TDM
       ' Margin, BossName, ShopKind, ShopRights, Phone1, '
       'Phone2, StarLevel, PactFile'
       'from T13PactInfo'
-      'where FeatureID=:FeatureID ')
+      'where FeatureID=:FeatureID and PactKind=:PactKind')
     Left = 373
     Top = 105
     ParamData = <
@@ -174,13 +176,19 @@ object DM: TDM
         Name = 'FEATUREID'
         DataType = ftString
         ParamType = ptInput
-        Value = Null
+        Value = '1-1F-A-007'
+      end
+      item
+        Name = 'PACTKIND'
+        DataType = ftString
+        ParamType = ptInput
+        Value = #31199#37329
       end>
   end
   object DS13: TDataSource
     DataSet = FDQ13
     Left = 375
-    Top = 158
+    Top = 167
   end
   object FDQ02: TFDQuery
     AutoCalcFields = False
@@ -263,5 +271,10 @@ object DM: TDM
     DataSet = FDQ02
     Left = 450
     Top = 160
+  end
+  object FDGUIxAsyncExecuteDialog1: TFDGUIxAsyncExecuteDialog
+    Provider = 'Forms'
+    Left = 394
+    Top = 462
   end
 end

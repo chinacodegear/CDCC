@@ -75,7 +75,6 @@ type
     DBAdvEdit16: TDBAdvEdit;
     DBAdvEdit17: TDBAdvEdit;
     DBAdvEdit18: TDBAdvEdit;
-    AdvDBComboBox1: TAdvDBComboBox;
     AdvDBDateTimePicker1: TAdvDBDateTimePicker;
     AdvDBDateTimePicker2: TAdvDBDateTimePicker;
     AdvMetroTile1: TAdvMetroTile;
@@ -87,6 +86,7 @@ type
     AdvBadgeMetroTile3: TAdvBadgeMetroTile;
     ImageList48: TImageList;
     N7: TMenuItem;
+    AdvComboBox1: TAdvComboBox;
     procedure AdvMetroFormCreate(Sender: TObject);
     procedure AdvSmoothDock1ItemClick(Sender: TObject; ItemIndex: Integer);
     procedure Drag1Click(Sender: TObject);
@@ -115,7 +115,12 @@ type
     procedure AdvSPopupFooterClick(Sender: TObject);
     procedure AdvSmoothComboBox1ItemChanged(Sender: TObject; ItemIndex: Integer);
     procedure N7Click(Sender: TObject);
+    procedure AdvComboBox1Change(Sender: TObject);
   private
+    procedure Get00Feature(sFeatureID: string);
+    procedure Get01Devices(sFeatureID: string);
+    procedure Get02PayFees(sFeatureID: string);
+    procedure Get13PactInfo(sFeatureID: string);
     { Private declarations }
   protected
     { Protected declarations }
@@ -140,7 +145,7 @@ implementation
 {$R *.dfm}
 
 
-uses UnitDBM, UnitMeta;
+uses UnitDBM, UnitMeta, UnitQuery;
 
 procedure TFormMain.OnPaintShapeLabel(const Sender: TObject; const shape: TGIS_Shape);
 begin
@@ -167,6 +172,11 @@ begin
   DM.FDQ02.ParamByName('FeeKind').Value := (Sender as TAdvBadgeMetroTile).Hint;
   DM.FDQ02.Open;
 
+end;
+
+procedure TFormMain.AdvComboBox1Change(Sender: TObject);
+begin
+  Get13PactInfo(DBAdvEdit1.Text);
 end;
 
 procedure TFormMain.AdvDBDateTimePicker1UserInput(Sender: TObject; const UserString: string; var DateAndTime: TDateTime;
@@ -307,6 +317,7 @@ begin
 
   Self.AdvSPopup.Control := AdvOfficePager1;
   Self.AdvSPopup.AutoSize := True;
+  AdvOfficePager11.Enabled := False; // 禁用基本信息
   // ttkViewer.Color := RGB(244, 243, 240);
   // ttkViewer.Open('D:\DataBase\Map\东海水晶城\H01-3D\l0101.shp');
   // 加载图层
@@ -350,9 +361,18 @@ begin
 end;
 
 procedure TFormMain.AdvSmoothDock1ItemClick(Sender: TObject; ItemIndex: Integer);
+var
+  formQuery: TFormQuery;
 begin
   // ShowMessage(ItemIndex.ToString);
   // TMSForm2.ShowModal;
+  case ItemIndex of
+    0: // 综合查询
+      begin
+        formQuery := TFormQuery.Create(nil);
+        formQuery.ShowModal;
+      end;
+  end;
 end;
 
 procedure TFormMain.AdvSmoothRotaryMenuDialog1MenuItemClick(Sender: TObject; AItemIndex: Integer);
@@ -409,6 +429,63 @@ begin
     end;
   end;
   ttkViewer.Update;
+end;
+
+procedure TFormMain.Get13PactInfo(sFeatureID: string);
+begin
+  DM.FDQ13.Close;
+  DM.FDQ13.ParamByName('FeatureID').Value := sFeatureID;
+  DM.FDQ13.ParamByName('PactKind').Value := AdvComboBox1.Text;
+  DM.FDQ13.Open;
+
+  if DM.FDQ13.RecordCount = 0 then
+  begin
+    DM.FDQ13.Close;
+    AdvOfficePager13.Enabled := False;
+    AdvMetroTile1.Caption := '无合同信息';
+  end
+  else
+  begin
+    AdvOfficePager13.Enabled := True;
+    AdvMetroTile1.Caption := '合同文本';
+  end;
+end;
+
+procedure TFormMain.Get02PayFees(sFeatureID: string);
+begin
+  // 获取 缴费信息
+  DM.FDQ02.Close;
+  DM.FDQ02.ParamByName('FeatureID').Value := sFeatureID;
+  DM.FDQ02.ParamByName('FeeKind').Value := AdvBadgeMetroTile1.Hint;
+  DM.FDQ02.Open;
+  AdvBadgeMetroTile1.Down := True;
+end;
+
+procedure TFormMain.Get01Devices(sFeatureID: string);
+begin
+  // 获取 商铺设备信息
+  DM.FDQ01.Close;
+  DM.FDQ01.ParamByName('FeatureID').Value := sFeatureID;
+  DM.FDQ01.Open;
+end;
+
+procedure TFormMain.Get00Feature(sFeatureID: string);
+begin
+  // 获取 商铺基础信息
+  DM.FDQ00.Close;
+  DM.FDQ00.ParamByName('FeatureID').Value := sFeatureID;
+  DM.FDQ00.Open;
+  if DM.FDQ00.FieldByName('rentoff').AsSingle > 1 then
+  begin
+    DBAdvEdit9.Suffix := '元';
+  end
+  else
+  begin
+    DBAdvEdit9.Suffix := ' %';
+    DBAdvEdit9.Text := (DM.FDQ00.FieldByName('rentoff').AsSingle * 100).ToString;
+    DBAdvEdit10.Text := (DM.FDQ00.FieldByName('rentoff').AsSingle * 365 * DM.FDQ00.FieldByName('rentprice')
+      .AsSingle).ToString;
+  end;
 end;
 
 procedure TFormMain.CurvyEdit1Change(Sender: TObject);
@@ -658,10 +735,17 @@ begin
                     ttkShape := ttkShape.MakeEditable;
                     ttkShape.IsSelected := True;
                     sFeatureID := ttkShape.GetField('FeatureID');
+
+                    Get00Feature(sFeatureID);
+                    Get01Devices(sFeatureID);
+                    Get02PayFees(sFeatureID);
+                    Get13PactInfo(sFeatureID);
+
                     AdvSPopup.HeaderCaption := sFeatureID;
                     AdvSPopup.FooterCaption := X.ToString + '/' + xPoint.X.ToString +
                       '/' + (AdvOfficePager1.Width + xPoint.X).ToString + '/' +
                       Self.Width.ToString;
+
                     if (AdvOfficePager1.Width + xPoint.X) > Self.Width then
                     begin
                       xPoint.X := xPoint.X - (1 * AdvOfficePager1.Width);
@@ -672,33 +756,6 @@ begin
                       xPoint.Y := xPoint.Y - (1 * AdvOfficePager1.Height);
                     end;
 
-                    // 获取 商铺基础信息
-                    DM.FDQ00.Close;
-                    DM.FDQ00.ParamByName('FeatureID').Value := sFeatureID;
-                    DM.FDQ00.Open;
-                    if DM.FDQ00.FieldByName('rentoff').AsSingle > 1 then
-                    begin
-                      DBAdvEdit9.Suffix := '元';
-                    end
-                    else
-                    begin
-                      DBAdvEdit9.Suffix := ' %';
-                      DBAdvEdit9.Text := (DM.FDQ00.FieldByName('rentoff').AsSingle * 100).ToString;
-                      DBAdvEdit10.Text := (DM.FDQ00.FieldByName('rentoff').AsSingle *
-                        365 * DM.FDQ00.FieldByName('rentprice').AsSingle).ToString;
-                    end;
-
-                    // 获取 商铺设备信息
-                    DM.FDQ01.Close;
-                    DM.FDQ01.ParamByName('FeatureID').Value := sFeatureID;
-                    DM.FDQ01.Open;
-
-                    // 获取 缴费信息
-                    DM.FDQ02.Close;
-                    DM.FDQ02.ParamByName('FeatureID').Value := sFeatureID;
-                    DM.FDQ02.ParamByName('FeeKind').Value := AdvBadgeMetroTile1.Hint;
-                    DM.FDQ02.Open;
-                    AdvBadgeMetroTile1.Down := True;
                     AdvSPopup.PopupAt(xPoint.X, xPoint.Y);
                   end
                   else
@@ -727,55 +784,50 @@ end;
 
 procedure TFormMain.ttkViewerMouseWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
 var
-  pt: TPoint;
-  ptg1: TGIS_Point;
-  ptg2: TGIS_Point;
-  delta: TGIS_Point;
+  pt : TPoint ;
+  cam: TGIS_Point3D ;
 begin
-  with ttkViewer do
-  begin
-    pt := ScreenToClient(MousePos);
-    if not PtInRect(ClientRect, pt) then
-      exit; // not this window
-    Handled := True;
-    if IsEmpty then
-      exit;
-    // zoom and restore a proper map position
-    ptg1 := ScreenToMap(ScreenToClient(MousePos));
-    Zoom := Zoom * 1.4;
-    ptg2 := ScreenToMap(ScreenToClient(MousePos));
-    delta.X := ptg1.X - ptg2.X;
-    delta.Y := ptg1.Y - ptg2.Y;
-    Center := GisPoint(Center.X + delta.X, Center.Y + delta.Y);
-    Handled := True;
-  end;
+  if ttkViewer.IsEmpty then exit ;
+
+  pt := ttkViewer.ScreenToClient( MousePos ) ;
+
+  if ttkViewer.View3D then begin
+    // allows MouseWheel works properly in ZoomMode
+    ttkViewer.Viewer3D.StoreMousePos( pt ) ;
+
+    cam := ttkViewer.Viewer3D.CameraPosition ;
+    cam.Z := cam.Z  / ( 1 + 0.05 ) ;
+    ttkViewer.Viewer3D.CameraPosition := cam ;
+  end
+  else
+    ttkViewer.ZoomBy( 3/2, pt.X, pt.Y );
+
+  Handled := True ;
 end;
 
 procedure TFormMain.ttkViewerMouseWheelUp(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
 var
-  pt: TPoint;
-  ptg1: TGIS_Point;
-  ptg2: TGIS_Point;
-  delta: TGIS_Point;
+  pt : TPoint ;
+  cam: TGIS_Point3D ;
 begin
-  with ttkViewer do
-  begin
-    pt := ScreenToClient(MousePos);
-    if not PtInRect(ClientRect, pt) then
-      exit; // not this window
-    Handled := True;
-    if IsEmpty then
-      exit;
-    // zoom and restore a proper map position
-    ptg1 := ScreenToMap(ScreenToClient(MousePos));
-    Zoom := Zoom * 0.1;
-    ptg2 := ScreenToMap(ScreenToClient(MousePos));
-    delta.X := ptg1.X - ptg2.X;
-    delta.Y := ptg1.Y - ptg2.Y;
-    Center := GisPoint(Center.X + delta.X, Center.Y + delta.Y);
-    Handled := True;
-  end;
+  if ttkViewer.IsEmpty then exit ;
+
+  pt := ttkViewer.ScreenToClient( MousePos ) ;
+
+  if ttkViewer.View3D then begin
+    // allows MouseWheel works properly in ZoomMode
+    ttkViewer.Viewer3D.StoreMousePos( pt ) ;
+
+    cam := ttkViewer.Viewer3D.CameraPosition ;
+    cam.Z := cam.Z  * ( 1 + 0.05 ) ;
+    ttkViewer.Viewer3D.CameraPosition := cam ;
+  end
+  else
+    ttkViewer.ZoomBy( 2/3, pt.X, pt.Y );
+
+  Handled := True ;
 end;
+
 
 procedure TFormMain.WMEnterSizeMove(var Message: TMessage);
 begin

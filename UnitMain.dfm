@@ -6,7 +6,7 @@ object FormMain: TFormMain
   ActiveControl = ttkViewer
   Caption = #20013#22269#19996#28023#27700#26230#22478' GIS '#31995#32479
   ClientHeight = 562
-  ClientWidth = 777
+  ClientWidth = 809
   Color = clWindow
   Constraints.MinHeight = 300
   Constraints.MinWidth = 100
@@ -39,7 +39,7 @@ object FormMain: TFormMain
   Appearance.TextColor = clBlack
   Text = ''
   DesignSize = (
-    777
+    809
     562)
   PixelsPerInch = 96
   TextHeight = 13
@@ -434,7 +434,7 @@ object FormMain: TFormMain
   object AdvSmoothDock1: TAdvSmoothDock
     Left = 332
     Top = 17
-    Width = 330
+    Width = 381
     Height = 24
     AutoSize = False
     Fill.Color = 12184289
@@ -900,7 +900,7 @@ object FormMain: TFormMain
   object W7Panel1: TW7Panel
     Left = 0
     Top = 537
-    Width = 777
+    Width = 809
     Height = 25
     Margins.Left = 0
     Margins.Top = 0
@@ -926,7 +926,7 @@ object FormMain: TFormMain
     ParentFont = False
     TabOrder = 4
     object AdvMetroButton2: TAdvMetroButton
-      Left = 744
+      Left = 776
       Top = 0
       Width = 33
       Height = 25
@@ -959,7 +959,7 @@ object FormMain: TFormMain
       Version = '1.1.2.0'
     end
     object AdvMetroButton3: TAdvMetroButton
-      Left = 711
+      Left = 743
       Top = 0
       Width = 33
       Height = 25
@@ -1002,7 +1002,7 @@ object FormMain: TFormMain
       Version = '1.1.2.0'
     end
     object AdvMetroButton4: TAdvMetroButton
-      Left = 645
+      Left = 677
       Top = 0
       Width = 33
       Height = 25
@@ -1051,7 +1051,7 @@ object FormMain: TFormMain
       Version = '1.1.2.0'
     end
     object AdvMetroButton5: TAdvMetroButton
-      Left = 678
+      Left = 710
       Top = 0
       Width = 33
       Height = 25
@@ -1105,7 +1105,7 @@ object FormMain: TFormMain
       Version = '1.1.2.0'
     end
     object AdvSmoothComboBox1: TAdvSmoothComboBox
-      Left = 495
+      Left = 527
       Top = 0
       Width = 117
       Height = 30
@@ -1567,7 +1567,7 @@ object FormMain: TFormMain
       TMSStyle = 4
     end
     object AdvMetroButton6: TAdvMetroButton
-      Left = 612
+      Left = 644
       Top = 0
       Width = 33
       Height = 25
@@ -1666,7 +1666,7 @@ object FormMain: TFormMain
     end
   end
   object AdvExpanderPanel1: TAdvSmoothExpanderButtonPanel
-    Left = 544
+    Left = 598
     Top = 97
     Width = 203
     Height = 201
@@ -1763,7 +1763,7 @@ object FormMain: TFormMain
     TabOrder = 7
   end
   object GIS_ControlNorthArrow1: TGIS_ControlNorthArrow
-    Left = 730
+    Left = 762
     Top = 8
     Width = 39
     Height = 41
@@ -1782,6 +1782,7 @@ object FormMain: TFormMain
     Width = 519
     Height = 215
     ActivePage = AdvOfficePager11
+    AntiAlias = aaNone
     ButtonSettings.CloseButtonPicture.Data = {
       424DA20400000000000036040000280000000900000009000000010008000000
       00006C000000C30E0000C30E00000001000000010000427B8400DEEFEF00FFFF
@@ -2066,7 +2067,9 @@ object FormMain: TFormMain
     ButtonSettings.ScrollButtonLastHint = 'Last'
     ButtonSettings.ClosedListButtonHint = 'Closed Pages'
     DoubleBuffered = False
+    FloatingBorderIcons = []
     TabSettings.Shape = tsLeftRamp
+    Transparent = True
     ShowShortCutHints = False
     TabOrder = 9
     NextPictureChanged = False
@@ -2232,6 +2235,8 @@ object FormMain: TFormMain
         Lookup.Font.Name = 'Arial'
         Lookup.Font.Style = []
         Lookup.Separator = ';'
+        BiDiMode = bdRightToLeft
+        ParentBiDiMode = False
         AutoSelect = False
         AutoSize = False
         Color = clWindow
@@ -2269,6 +2274,8 @@ object FormMain: TFormMain
         Lookup.Font.Name = 'Arial'
         Lookup.Font.Style = []
         Lookup.Separator = ';'
+        BiDiMode = bdRightToLeft
+        ParentBiDiMode = False
         AutoSelect = False
         AutoSize = False
         Color = clWindow
@@ -2714,12 +2721,11 @@ object FormMain: TFormMain
       TabAppearance.BackGround.ColorTo = clNone
       TabAppearance.BackGround.Direction = gdHorizontal
       object DBAdvEdit11: TDBAdvEdit
-        Left = 72
+        Left = 67
         Top = 29
         Width = 131
         Height = 19
         AutoThousandSeparator = False
-        EditAlign = eaRight
         EmptyTextStyle = []
         FlatParentColor = False
         FocusBorder = True
@@ -2738,15 +2744,19 @@ object FormMain: TFormMain
         Lookup.Font.Name = 'Arial'
         Lookup.Font.Style = []
         Lookup.Separator = ';'
+        BiDiMode = bdRightToLeft
+        ParentBiDiMode = False
         AutoSelect = False
         AutoSize = False
         Color = clWindow
         Ctl3D = False
+        MaxLength = 10
         ParentCtl3D = False
         TabOrder = 0
-        Text = '2016112011234567'
+        Text = ''
         Visible = True
         Version = '3.4.1.1'
+        DataField = 'PactID'
         DataSource = DM.DS13
       end
       object DBAdvEdit12: TDBAdvEdit
@@ -2775,15 +2785,18 @@ object FormMain: TFormMain
         Lookup.Font.Name = 'Arial'
         Lookup.Font.Style = []
         Lookup.Separator = ';'
+        BiDiMode = bdLeftToRight
+        ParentBiDiMode = False
         AutoSelect = False
         AutoSize = False
         Color = clWindow
         Ctl3D = False
         ParentCtl3D = False
         TabOrder = 1
-        Text = '10000'
+        Text = ''
         Visible = True
         Version = '3.4.1.1'
+        DataField = 'Margin'
         DataSource = DM.DS13
       end
       object DBAdvEdit13: TDBAdvEdit
@@ -2792,7 +2805,6 @@ object FormMain: TFormMain
         Width = 95
         Height = 19
         AutoThousandSeparator = False
-        EditAlign = eaRight
         EmptyTextStyle = []
         FlatParentColor = False
         FocusBorder = True
@@ -2811,15 +2823,19 @@ object FormMain: TFormMain
         Lookup.Font.Name = 'Arial'
         Lookup.Font.Style = []
         Lookup.Separator = ';'
+        BiDiMode = bdRightToLeft
+        ParentBiDiMode = False
         AutoSelect = False
         AutoSize = False
         Color = clWindow
         Ctl3D = False
+        MaxLength = 15
         ParentCtl3D = False
         TabOrder = 2
-        Text = #24352#19977#26446#22235
+        Text = ''
         Visible = True
         Version = '3.4.1.1'
+        DataField = 'BossName'
         DataSource = DM.DS13
       end
       object DBAdvEdit14: TDBAdvEdit
@@ -2828,7 +2844,6 @@ object FormMain: TFormMain
         Width = 95
         Height = 19
         AutoThousandSeparator = False
-        EditAlign = eaRight
         EmptyTextStyle = []
         FlatParentColor = False
         FocusBorder = True
@@ -2847,15 +2862,19 @@ object FormMain: TFormMain
         Lookup.Font.Name = 'Arial'
         Lookup.Font.Style = []
         Lookup.Separator = ';'
+        BiDiMode = bdRightToLeft
+        ParentBiDiMode = False
         AutoSelect = False
         AutoSize = False
         Color = clWindow
         Ctl3D = False
+        MaxLength = 15
         ParentCtl3D = False
         TabOrder = 3
-        Text = #26222#36890#21830#25143
+        Text = ''
         Visible = True
         Version = '3.4.1.1'
+        DataField = 'ShopKind'
         DataSource = DM.DS13
       end
       object DBAdvEdit15: TDBAdvEdit
@@ -2864,7 +2883,6 @@ object FormMain: TFormMain
         Width = 62
         Height = 19
         AutoThousandSeparator = False
-        EditAlign = eaRight
         EmptyTextStyle = []
         FlatParentColor = False
         FocusBorder = True
@@ -2883,15 +2901,19 @@ object FormMain: TFormMain
         Lookup.Font.Name = 'Arial'
         Lookup.Font.Style = []
         Lookup.Separator = ';'
+        BiDiMode = bdRightToLeft
+        ParentBiDiMode = False
         AutoSelect = False
         AutoSize = False
         Color = clWindow
         Ctl3D = False
+        MaxLength = 12
         ParentCtl3D = False
         TabOrder = 4
-        Text = #20351#29992#26435#20154
+        Text = ''
         Visible = True
         Version = '3.4.1.1'
+        DataField = 'ShopRights'
         DataSource = DM.DS13
       end
       object DBAdvEdit16: TDBAdvEdit
@@ -2900,7 +2922,6 @@ object FormMain: TFormMain
         Width = 95
         Height = 19
         AutoThousandSeparator = False
-        EditAlign = eaRight
         EmptyTextStyle = []
         FlatParentColor = False
         FocusBorder = True
@@ -2919,24 +2940,27 @@ object FormMain: TFormMain
         Lookup.Font.Name = 'Arial'
         Lookup.Font.Style = []
         Lookup.Separator = ';'
+        BiDiMode = bdRightToLeft
+        ParentBiDiMode = False
         AutoSelect = False
         AutoSize = False
         Color = clWindow
         Ctl3D = False
+        MaxLength = 15
         ParentCtl3D = False
         TabOrder = 5
-        Text = '13912345678'
+        Text = ''
         Visible = True
         Version = '3.4.1.1'
+        DataField = 'Phone1'
         DataSource = DM.DS13
       end
       object DBAdvEdit17: TDBAdvEdit
         Left = 264
-        Top = 149
+        Top = 148
         Width = 95
         Height = 19
         AutoThousandSeparator = False
-        EditAlign = eaRight
         EmptyTextStyle = []
         FlatParentColor = False
         FocusBorder = True
@@ -2955,15 +2979,19 @@ object FormMain: TFormMain
         Lookup.Font.Name = 'Arial'
         Lookup.Font.Style = []
         Lookup.Separator = ';'
+        BiDiMode = bdRightToLeft
+        ParentBiDiMode = False
         AutoSelect = False
         AutoSize = False
         Color = clWindow
         Ctl3D = False
+        MaxLength = 15
         ParentCtl3D = False
         TabOrder = 6
-        Text = '051812345678'
+        Text = ''
         Visible = True
         Version = '3.4.1.1'
+        DataField = 'Phone2'
         DataSource = DM.DS13
       end
       object DBAdvEdit18: TDBAdvEdit
@@ -2997,62 +3025,30 @@ object FormMain: TFormMain
         Ctl3D = False
         ParentCtl3D = False
         TabOrder = 7
-        Text = '3'
+        Text = ''
         Visible = True
         Version = '3.4.1.1'
+        DataField = 'StarLevel'
         DataSource = DM.DS13
-      end
-      object AdvDBComboBox1: TAdvDBComboBox
-        Left = 72
-        Top = 66
-        Width = 65
-        Height = 21
-        Color = clWindow
-        Version = '1.0.1.5'
-        Visible = True
-        Ctl3D = True
-        DataField = 'PactKind'
-        DataSource = DM.DS13
-        DropWidth = 0
-        Enabled = True
-        ItemIndex = 0
-        Items.Strings = (
-          #31199#37329
-          #29289#19994)
-        Items.StoredStrings = (
-          #31199#37329
-          #29289#19994)
-        LabelCaption = #21512#21516#31867#22411
-        LabelPosition = lpLeftCenter
-        LabelTransparent = True
-        LabelFont.Charset = DEFAULT_CHARSET
-        LabelFont.Color = clWindowText
-        LabelFont.Height = -11
-        LabelFont.Name = 'Tahoma'
-        LabelFont.Style = []
-        ParentCtl3D = False
-        TabOrder = 8
-        BiDiMode = bdLeftToRight
-        ParentBiDiMode = False
       end
       object AdvDBDateTimePicker1: TAdvDBDateTimePicker
-        Left = 72
+        Left = 67
         Top = 107
         Width = 131
         Height = 21
-        Date = 42696.000000000000000000
+        Date = 36526.000000000000000000
         Format = ''
-        Time = 42696.000000000000000000
+        Time = 36526.000000000000000000
         DateFormat = dfLong
         DoubleBuffered = True
         Kind = dkDate
         ParentDoubleBuffered = False
-        TabOrder = 9
+        TabOrder = 8
         TabStop = True
         OnUserInput = AdvDBDateTimePicker1UserInput
         BorderStyle = bsSingle
         Ctl3D = True
-        DateTime = 42696.000000000000000000
+        DateTime = 36526.000000000000000000
         Version = '1.2.5.0'
         LabelCaption = #21512#21516#36215#22987
         LabelPosition = lpLeftCenter
@@ -3062,26 +3058,27 @@ object FormMain: TFormMain
         LabelFont.Height = -11
         LabelFont.Name = 'Tahoma'
         LabelFont.Style = []
+        DataField = 'PactBegin'
         DataSource = DM.DS13
       end
       object AdvDBDateTimePicker2: TAdvDBDateTimePicker
-        Left = 72
+        Left = 67
         Top = 147
         Width = 131
         Height = 21
-        Date = 42696.000000000000000000
+        Date = 43465.000000000000000000
         Format = ''
-        Time = 42696.000000000000000000
+        Time = 43465.000000000000000000
         DateFormat = dfLong
         DateMode = dmUpDown
         DoubleBuffered = True
         Kind = dkDate
         ParentDoubleBuffered = False
-        TabOrder = 10
+        TabOrder = 9
         TabStop = True
         BorderStyle = bsSingle
         Ctl3D = True
-        DateTime = 42696.000000000000000000
+        DateTime = 43465.000000000000000000
         Version = '1.2.5.0'
         LabelCaption = #21512#21516#32456#27490
         LabelPosition = lpLeftCenter
@@ -3091,6 +3088,7 @@ object FormMain: TFormMain
         LabelFont.Height = -11
         LabelFont.Name = 'Tahoma'
         LabelFont.Style = []
+        DataField = 'PactEnd'
         DataSource = DM.DS13
       end
       object AdvMetroTile1: TAdvMetroTile
@@ -3110,8 +3108,35 @@ object FormMain: TFormMain
         Appearance.DisabledTextColor = clGray
         Caption = #21512#21516#25991#26412
         Layout = tlPicBackground
-        TabOrder = 11
+        TabOrder = 10
         Version = '1.1.2.0'
+      end
+      object AdvComboBox1: TAdvComboBox
+        Left = 67
+        Top = 66
+        Width = 65
+        Height = 21
+        Color = clWindow
+        Version = '1.6.2.1'
+        Visible = True
+        EmptyTextStyle = []
+        DropWidth = 0
+        Enabled = True
+        ItemIndex = 0
+        Items.Strings = (
+          #31199#37329
+          #29289#19994)
+        LabelCaption = #21512#21516#31867#22411
+        LabelPosition = lpLeftCenter
+        LabelTransparent = True
+        LabelFont.Charset = DEFAULT_CHARSET
+        LabelFont.Color = clWindowText
+        LabelFont.Height = -11
+        LabelFont.Name = 'Tahoma'
+        LabelFont.Style = []
+        TabOrder = 11
+        Text = #31199#37329
+        OnChange = AdvComboBox1Change
       end
     end
     object AdvOfficePage14: TAdvOfficePage
@@ -3249,6 +3274,7 @@ object FormMain: TFormMain
             EditButtons = <>
             FieldName = 'PaidFee'
             Footers = <>
+            Width = 50
           end
           item
             Alignment = taCenter
@@ -3256,6 +3282,7 @@ object FormMain: TFormMain
             EditButtons = <>
             FieldName = 'Payee'
             Footers = <>
+            Width = 50
           end
           item
             Alignment = taCenter
@@ -3263,6 +3290,7 @@ object FormMain: TFormMain
             EditButtons = <>
             FieldName = 'Recorder'
             Footers = <>
+            Width = 50
           end
           item
             Alignment = taCenter
@@ -4237,7 +4265,7 @@ object FormMain: TFormMain
     Left = 443
     Top = 155
     Bitmap = {
-      494C0101010008001C0030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000800280030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C00000003000000001002000000000000090
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
