@@ -19,7 +19,7 @@ object DM: TDM
       'FetchAll=True'
       'UseUnicode=True')
     BeforeConnect = GeoDBCBeforeConnect
-    Left = 28
+    Left = 477
     Top = 22
   end
   object FDConn: TFDConnection
@@ -33,7 +33,7 @@ object DM: TDM
     Connected = True
     LoginPrompt = False
     BeforeConnect = FDConnBeforeConnect
-    Left = 106
+    Left = 555
     Top = 25
   end
   object FDQuick: TFDQuery
@@ -45,9 +45,11 @@ object DM: TDM
     UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
     SQL.Strings = (
-      'select UID, featureid from &TabName where Featureid like :FID')
-    Left = 160
-    Top = 103
+      'select UID, featureid '
+      'from &TabName '
+      'where Featureid like :FID')
+    Left = 31
+    Top = 87
     ParamData = <
       item
         Name = 'FID'
@@ -72,14 +74,41 @@ object DM: TDM
   end
   object FDQuery: TFDQuery
     Connection = FDConn
-    FetchOptions.AssignedValues = [evUnidirectional]
-    FetchOptions.Unidirectional = True
+    FetchOptions.AssignedValues = [evCache, evRecordCountMode, evUnidirectional]
+    FetchOptions.RecordCountMode = cmTotal
+    FetchOptions.Cache = [fiDetails, fiMeta]
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
-    Left = 22
-    Top = 452
+    SQL.Strings = (
+      'select featureid from &TableName'
+      'where &FID like :IDValue'
+      'and featureid like :AFeatID')
+    Left = 27
+    Top = 336
+    ParamData = <
+      item
+        Name = 'IDVALUE'
+        DataType = ftString
+        ParamType = ptInput
+        Value = '%-123'
+      end
+      item
+        Name = 'AFEATID'
+        DataType = ftString
+        ParamType = ptInput
+        Value = '%'
+      end>
+    MacroData = <
+      item
+        Value = 'T00Features'
+        Name = 'TABLENAME'
+      end
+      item
+        Value = 'Featureid'
+        Name = 'FID'
+      end>
   end
   object FDQ00: TFDQuery
     Connection = FDConn
@@ -93,8 +122,8 @@ object DM: TDM
       'PropPrice,RentOff'
       'from T00Features '
       'where FeatureID =:FeatureID')
-    Left = 229
-    Top = 101
+    Left = 26
+    Top = 165
     ParamData = <
       item
         Name = 'FEATUREID'
@@ -105,8 +134,8 @@ object DM: TDM
   end
   object DS00: TDataSource
     DataSet = FDQ00
-    Left = 232
-    Top = 166
+    Left = 29
+    Top = 230
   end
   object FDQ01: TFDQuery
     Connection = FDConn
@@ -119,8 +148,8 @@ object DM: TDM
       'DeviceStatus'
       'from T01Devices'
       'where FeatureID =:FeatureID')
-    Left = 306
-    Top = 101
+    Left = 103
+    Top = 165
     ParamData = <
       item
         Name = 'FEATUREID'
@@ -154,8 +183,8 @@ object DM: TDM
   end
   object DS01: TDataSource
     DataSet = FDQ01
-    Left = 310
-    Top = 162
+    Left = 107
+    Top = 226
   end
   object FDQ13: TFDQuery
     Connection = FDConn
@@ -169,8 +198,8 @@ object DM: TDM
       'Phone2, StarLevel, PactFile'
       'from T13PactInfo'
       'where FeatureID=:FeatureID and PactKind=:PactKind')
-    Left = 373
-    Top = 105
+    Left = 170
+    Top = 169
     ParamData = <
       item
         Name = 'FEATUREID'
@@ -187,8 +216,8 @@ object DM: TDM
   end
   object DS13: TDataSource
     DataSet = FDQ13
-    Left = 375
-    Top = 167
+    Left = 172
+    Top = 231
   end
   object FDQ02: TFDQuery
     AutoCalcFields = False
@@ -204,8 +233,8 @@ object DM: TDM
       'PaidFee,Payee,Recorder,Memo'
       'from T02PayFees'
       'where FeatureID=:FeatureID and FeeKind =:FeeKind')
-    Left = 448
-    Top = 105
+    Left = 245
+    Top = 169
     ParamData = <
       item
         Name = 'FEATUREID'
@@ -269,12 +298,139 @@ object DM: TDM
   end
   object DS02: TDataSource
     DataSet = FDQ02
-    Left = 450
-    Top = 160
+    Left = 247
+    Top = 224
   end
   object FDGUIxAsyncExecuteDialog1: TFDGUIxAsyncExecuteDialog
     Provider = 'Forms'
     Left = 394
     Top = 462
+  end
+  object FDQuery2: TFDQuery
+    Connection = FDConn
+    FetchOptions.AssignedValues = [evCache, evRecordCountMode, evUnidirectional]
+    FetchOptions.RecordCountMode = cmTotal
+    FetchOptions.Cache = [fiDetails, fiMeta]
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
+    SQL.Strings = (
+      'select featureid from &TableName'
+      'where '
+      '&FID >= :IDValue1 '
+      'and'
+      '&FID <= :IDValue2'
+      'and '
+      'featureid like :AFeatID'
+      'and '
+      'FeatureStatus = :AFeatStatus'
+      ''
+      '')
+    Left = 23
+    Top = 403
+    ParamData = <
+      item
+        Name = 'IDVALUE1'
+        DataType = ftFloat
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'IDVALUE2'
+        DataType = ftFloat
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'AFEATID'
+        DataType = ftString
+        ParamType = ptInput
+        Value = '%'
+      end
+      item
+        Name = 'AFEATSTATUS'
+        DataType = ftString
+        ParamType = ptInput
+        Value = #26410#31199
+      end>
+    MacroData = <
+      item
+        Value = Null
+        Name = 'TABLENAME'
+      end
+      item
+        Value = Null
+        Name = 'FID'
+      end>
+  end
+  object DSQuery: TDataSource
+    AutoEdit = False
+    DataSet = FDQuery
+    Left = 100
+    Top = 371
+  end
+  object FDQuery3: TFDQuery
+    Connection = FDConn
+    FetchOptions.AssignedValues = [evRecordCountMode]
+    FetchOptions.RecordCountMode = cmTotal
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
+    SQL.Strings = (
+      'select Distinct FeatureID'
+      'from T13PactInfo'
+      'where '
+      'PactBegin>=:PactBegin'
+      'and'
+      'PactEnd<=:PactEnd'
+      'and'
+      'PactKind like :PactKind'
+      'and'
+      'ShopKind like :ShopKind'
+      'and'
+      'ShopRights like :ShopRights'
+      'and'
+      'FeatureID like :FeatureID')
+    Left = 189
+    Top = 339
+    ParamData = <
+      item
+        Name = 'PACTBEGIN'
+        DataType = ftDate
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'PACTEND'
+        DataType = ftDate
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'PACTKIND'
+        DataType = ftString
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'SHOPKIND'
+        DataType = ftString
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'SHOPRIGHTS'
+        DataType = ftString
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'FEATUREID'
+        DataType = ftString
+        ParamType = ptInput
+        Value = Null
+      end>
   end
 end

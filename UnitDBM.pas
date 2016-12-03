@@ -38,6 +38,9 @@ type
     FDQ02Recorder: TStringField;
     FDQ02Memo: TStringField;
     FDGUIxAsyncExecuteDialog1: TFDGUIxAsyncExecuteDialog;
+    FDQuery2: TFDQuery;
+    DSQuery: TDataSource;
+    FDQuery3: TFDQuery;
     procedure GeoDBCBeforeConnect(Sender: TObject);
     procedure FDConnBeforeConnect(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);

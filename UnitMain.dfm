@@ -4,9 +4,11 @@ object FormMain: TFormMain
   HorzScrollBar.Visible = False
   VertScrollBar.Visible = False
   ActiveControl = ttkViewer
+  Align = alClient
+  BorderIcons = [biSystemMenu, biMinimize]
   Caption = #20013#22269#19996#28023#27700#26230#22478' GIS '#31995#32479
   ClientHeight = 562
-  ClientWidth = 809
+  ClientWidth = 806
   Color = clWindow
   Constraints.MinHeight = 300
   Constraints.MinWidth = 100
@@ -19,9 +21,9 @@ object FormMain: TFormMain
   KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
+  WindowState = wsMaximized
+  OnCloseQuery = AdvMetroFormCloseQuery
   OnCreate = AdvMetroFormCreate
-  OnMouseWheelDown = ttkViewerMouseWheelDown
-  OnMouseWheelUp = ttkViewerMouseWheelUp
   Appearance.SystemIconColorDisabled = 5921370
   Appearance.CaptionFont.Charset = DEFAULT_CHARSET
   Appearance.CaptionFont.Color = clWhite
@@ -37,9 +39,10 @@ object FormMain: TFormMain
   Appearance.Font.Name = 'Segoe UI'
   Appearance.Font.Style = []
   Appearance.TextColor = clBlack
+  NoDropShadow = True
   Text = ''
   DesignSize = (
-    809
+    806
     562)
   PixelsPerInch = 96
   TextHeight = 13
@@ -51,7 +54,7 @@ object FormMain: TFormMain
     Cursor = 16
     ParentCustomHint = False
     Copyright = 
-      'TatukGIS Developer Kernel. 10.50.1.15724  (c)2000-2016 TatukGIS.' +
+      'TatukGIS Developer Kernel. 10.51.0.15749  (c)2000-2016 TatukGIS.' +
       ' ALL RIGHTS RESERVED.'
     InterruptByEsc = True
     BigExtentMargin = -10
@@ -364,6 +367,7 @@ object FormMain: TFormMain
     ParentShowHint = False
     PopupMenu = AdvPopup4Map
     TabOrder = 3
+    OnMouseMove = ttkViewerMouseMove
     OnMouseUp = ttkViewerMouseUp
     OnMouseWheelUp = ttkViewerMouseWheelUp
     OnMouseWheelDown = ttkViewerMouseWheelDown
@@ -900,7 +904,7 @@ object FormMain: TFormMain
   object W7Panel1: TW7Panel
     Left = 0
     Top = 537
-    Width = 809
+    Width = 806
     Height = 25
     Margins.Left = 0
     Margins.Top = 0
@@ -925,8 +929,9 @@ object FormMain: TFormMain
     Align = alBottom
     ParentFont = False
     TabOrder = 4
+    ExplicitWidth = 824
     object AdvMetroButton2: TAdvMetroButton
-      Left = 776
+      Left = 791
       Top = 0
       Width = 33
       Height = 25
@@ -959,7 +964,7 @@ object FormMain: TFormMain
       Version = '1.1.2.0'
     end
     object AdvMetroButton3: TAdvMetroButton
-      Left = 743
+      Left = 758
       Top = 0
       Width = 33
       Height = 25
@@ -1002,7 +1007,7 @@ object FormMain: TFormMain
       Version = '1.1.2.0'
     end
     object AdvMetroButton4: TAdvMetroButton
-      Left = 677
+      Left = 692
       Top = 0
       Width = 33
       Height = 25
@@ -1051,7 +1056,7 @@ object FormMain: TFormMain
       Version = '1.1.2.0'
     end
     object AdvMetroButton5: TAdvMetroButton
-      Left = 710
+      Left = 725
       Top = 0
       Width = 33
       Height = 25
@@ -1105,7 +1110,7 @@ object FormMain: TFormMain
       Version = '1.1.2.0'
     end
     object AdvSmoothComboBox1: TAdvSmoothComboBox
-      Left = 527
+      Left = 542
       Top = 0
       Width = 117
       Height = 30
@@ -1567,7 +1572,7 @@ object FormMain: TFormMain
       TMSStyle = 4
     end
     object AdvMetroButton6: TAdvMetroButton
-      Left = 644
+      Left = 659
       Top = 0
       Width = 33
       Height = 25
@@ -1578,6 +1583,7 @@ object FormMain: TFormMain
       Appearance.PictureColorHover = clGreen
       Appearance.PictureColorDown = clRed
       Caption = ''
+      Down = True
       GroupIndex = 1
       Picture.Data = {
         89504E470D0A1A0A0000000D4948445200000020000000200806000000737A7A
@@ -1665,65 +1671,6 @@ object FormMain: TFormMain
       OnClick = AdvMetroButton7Click
     end
   end
-  object AdvExpanderPanel1: TAdvSmoothExpanderButtonPanel
-    Left = 598
-    Top = 97
-    Width = 203
-    Height = 201
-    Cursor = crDefault
-    CanMove = True
-    Resizable = True
-    Caption.Text = #21830#38138#21015#34920
-    Caption.HTMLFont.Charset = DEFAULT_CHARSET
-    Caption.HTMLFont.Color = clWindowText
-    Caption.HTMLFont.Height = -11
-    Caption.HTMLFont.Name = 'Tahoma'
-    Caption.HTMLFont.Style = []
-    Caption.Font.Charset = DEFAULT_CHARSET
-    Caption.Font.Color = clWindowText
-    Caption.Font.Height = -16
-    Caption.Font.Name = 'Tahoma'
-    Caption.Font.Style = []
-    Fill.Color = 16445929
-    Fill.ColorTo = 15587527
-    Fill.ColorMirror = 15587527
-    Fill.ColorMirrorTo = 16773863
-    Fill.GradientType = gtVertical
-    Fill.GradientMirrorType = gtVertical
-    Fill.BorderColor = 14922381
-    Fill.Rounding = 10
-    Fill.RoundingType = rtBottom
-    Fill.ShadowOffset = 0
-    Fill.Glow = gmNone
-    Version = '1.2.0.0'
-    Anchors = [akTop, akRight]
-    TabOrder = 5
-    ExpanderColor = 16445929
-    ExpanderDownColor = 15587527
-    ExpanderHoverColor = 11196927
-    ExpanderShape = esRounded
-    Buttons = <>
-    ButtonStatus.Appearance.Fill.ColorMirror = clNone
-    ButtonStatus.Appearance.Fill.ColorMirrorTo = clNone
-    ButtonStatus.Appearance.Fill.GradientType = gtVertical
-    ButtonStatus.Appearance.Fill.GradientMirrorType = gtSolid
-    ButtonStatus.Appearance.Fill.BorderColor = clNone
-    ButtonStatus.Appearance.Fill.Rounding = 0
-    ButtonStatus.Appearance.Fill.ShadowOffset = 0
-    ButtonStatus.Appearance.Fill.Glow = gmNone
-    ButtonStatus.Appearance.Font.Charset = DEFAULT_CHARSET
-    ButtonStatus.Appearance.Font.Color = clWindowText
-    ButtonStatus.Appearance.Font.Height = -11
-    ButtonStatus.Appearance.Font.Name = 'Tahoma'
-    ButtonStatus.Appearance.Font.Style = []
-    ButtonAppearance.Font.Charset = DEFAULT_CHARSET
-    ButtonAppearance.Font.Color = clWindowText
-    ButtonAppearance.Font.Height = -11
-    ButtonAppearance.Font.Name = 'Tahoma'
-    ButtonAppearance.Font.Style = []
-    TMSStyle = 4
-    OldHeight = 201.000000000000000000
-  end
   object GIS_ControlLegend1: TGIS_ControlLegend
     Left = 8
     Top = 8
@@ -1746,7 +1693,7 @@ object FormMain: TFormMain
     FontSubtitle.Style = []
     Spacing = 3
     TabStop = True
-    TabOrder = 6
+    TabOrder = 5
   end
   object GIS_ControlScale1: TGIS_ControlScale
     Left = 0
@@ -1760,10 +1707,10 @@ object FormMain: TFormMain
     Anchors = [akLeft, akBottom]
     BorderStyle = bsSingle
     Color = clBtnFace
-    TabOrder = 7
+    TabOrder = 6
   end
   object GIS_ControlNorthArrow1: TGIS_ControlNorthArrow
-    Left = 762
+    Left = 795
     Top = 8
     Width = 39
     Height = 41
@@ -1774,7 +1721,7 @@ object FormMain: TFormMain
     Anchors = [akTop, akRight]
     BorderStyle = bsSingle
     Color = clBtnFace
-    TabOrder = 8
+    TabOrder = 7
   end
   object AdvOfficePager1: TAdvOfficePager
     Left = 19
@@ -2069,9 +2016,8 @@ object FormMain: TFormMain
     DoubleBuffered = False
     FloatingBorderIcons = []
     TabSettings.Shape = tsLeftRamp
-    Transparent = True
     ShowShortCutHints = False
-    TabOrder = 9
+    TabOrder = 8
     NextPictureChanged = False
     PrevPictureChanged = False
     object AdvOfficePager11: TAdvOfficePage
@@ -3503,6 +3449,285 @@ object FormMain: TFormMain
       end
     end
   end
+  object AdvExpanderPanel1: TAdvSmoothExpanderPanel
+    Left = 648
+    Top = 119
+    Width = 171
+    Height = 397
+    Cursor = crDefault
+    CanMove = True
+    Resizable = True
+    ResizeHandle = False
+    Caption.Text = #21830#38138#21015#34920
+    Caption.HTMLFont.Charset = DEFAULT_CHARSET
+    Caption.HTMLFont.Color = clWindowText
+    Caption.HTMLFont.Height = -11
+    Caption.HTMLFont.Name = 'Tahoma'
+    Caption.HTMLFont.Style = []
+    Caption.Font.Charset = DEFAULT_CHARSET
+    Caption.Font.Color = clWindowText
+    Caption.Font.Height = -16
+    Caption.Font.Name = 'Tahoma'
+    Caption.Font.Style = []
+    Fill.Color = 16445929
+    Fill.ColorTo = 15587527
+    Fill.ColorMirror = 15587527
+    Fill.ColorMirrorTo = 16773863
+    Fill.GradientType = gtVertical
+    Fill.GradientMirrorType = gtVertical
+    Fill.BorderColor = 14922381
+    Fill.BorderOpacity = 100
+    Fill.Rounding = 0
+    Fill.RoundingType = rtNone
+    Fill.ShadowOffset = 0
+    Fill.ShadowType = stBottom
+    Fill.Glow = gmNone
+    Version = '1.1.1.0'
+    TabOrder = 9
+    ExpanderColor = 16445929
+    ExpanderDownColor = 15587527
+    ExpanderHoverColor = 11196927
+    ExpanderShape = esRounded
+    MinimumPanelHeight = 23
+    DesignSize = (
+      171
+      397)
+    TMSStyle = 4
+    OldHeight = 397.000000000000000000
+    object DBAdvSmoothListBox1: TDBAdvSmoothListBox
+      Left = 3
+      Top = 35
+      Width = 165
+      Height = 350
+      Cursor = crDefault
+      Fill.Color = 16445929
+      Fill.ColorTo = 15587527
+      Fill.ColorMirror = 15587527
+      Fill.ColorMirrorTo = 16773863
+      Fill.GradientType = gtVertical
+      Fill.GradientMirrorType = gtSolid
+      Fill.BorderColor = clNone
+      Fill.Rounding = 0
+      Fill.ShadowOffset = 0
+      Fill.Glow = gmNone
+      Items = <>
+      ItemAppearance.FillAlternate.Color = 16773091
+      ItemAppearance.FillAlternate.ColorTo = 16768452
+      ItemAppearance.FillAlternate.ColorMirror = 16765357
+      ItemAppearance.FillAlternate.ColorMirrorTo = 16767936
+      ItemAppearance.FillAlternate.GradientType = gtVertical
+      ItemAppearance.FillAlternate.GradientMirrorType = gtVertical
+      ItemAppearance.FillAlternate.BorderColor = 16765357
+      ItemAppearance.FillAlternate.Rounding = 0
+      ItemAppearance.FillAlternate.ShadowOffset = 0
+      ItemAppearance.FillAlternate.Glow = gmNone
+      ItemAppearance.Fill.Color = 16773091
+      ItemAppearance.Fill.ColorTo = 16768452
+      ItemAppearance.Fill.ColorMirror = 16765357
+      ItemAppearance.Fill.ColorMirrorTo = 16767936
+      ItemAppearance.Fill.GradientType = gtVertical
+      ItemAppearance.Fill.GradientMirrorType = gtVertical
+      ItemAppearance.Fill.BorderColor = 16765357
+      ItemAppearance.Fill.Rounding = 0
+      ItemAppearance.Fill.ShadowOffset = 0
+      ItemAppearance.Fill.Glow = gmNone
+      ItemAppearance.FillSelected.Color = 11196927
+      ItemAppearance.FillSelected.ColorTo = 7257087
+      ItemAppearance.FillSelected.ColorMirror = 4370174
+      ItemAppearance.FillSelected.ColorMirrorTo = 8053246
+      ItemAppearance.FillSelected.GradientType = gtVertical
+      ItemAppearance.FillSelected.GradientMirrorType = gtVertical
+      ItemAppearance.FillSelected.BorderColor = 16765357
+      ItemAppearance.FillSelected.Rounding = 0
+      ItemAppearance.FillSelected.ShadowOffset = 0
+      ItemAppearance.FillSelected.Glow = gmNone
+      ItemAppearance.FillSelectedAlternate.Color = 11196927
+      ItemAppearance.FillSelectedAlternate.ColorTo = 7257087
+      ItemAppearance.FillSelectedAlternate.ColorMirror = 4370174
+      ItemAppearance.FillSelectedAlternate.ColorMirrorTo = 8053246
+      ItemAppearance.FillSelectedAlternate.GradientType = gtVertical
+      ItemAppearance.FillSelectedAlternate.GradientMirrorType = gtVertical
+      ItemAppearance.FillSelectedAlternate.BorderColor = 16765357
+      ItemAppearance.FillSelectedAlternate.Rounding = 0
+      ItemAppearance.FillSelectedAlternate.ShadowOffset = 0
+      ItemAppearance.FillSelectedAlternate.Glow = gmNone
+      ItemAppearance.FillDisabled.Color = 15921906
+      ItemAppearance.FillDisabled.ColorTo = 11974326
+      ItemAppearance.FillDisabled.ColorMirror = 11974326
+      ItemAppearance.FillDisabled.ColorMirrorTo = 15921906
+      ItemAppearance.FillDisabled.GradientType = gtVertical
+      ItemAppearance.FillDisabled.GradientMirrorType = gtVertical
+      ItemAppearance.FillDisabled.BorderColor = 16765357
+      ItemAppearance.FillDisabled.Rounding = 0
+      ItemAppearance.FillDisabled.ShadowOffset = 0
+      ItemAppearance.FillDisabled.Glow = gmNone
+      ItemAppearance.ProgressAppearance.BackGroundFill.Color = 16765615
+      ItemAppearance.ProgressAppearance.BackGroundFill.ColorTo = 16765615
+      ItemAppearance.ProgressAppearance.BackGroundFill.ColorMirror = clNone
+      ItemAppearance.ProgressAppearance.BackGroundFill.ColorMirrorTo = clNone
+      ItemAppearance.ProgressAppearance.BackGroundFill.GradientType = gtVertical
+      ItemAppearance.ProgressAppearance.BackGroundFill.GradientMirrorType = gtSolid
+      ItemAppearance.ProgressAppearance.BackGroundFill.BorderColor = clSilver
+      ItemAppearance.ProgressAppearance.BackGroundFill.Rounding = 0
+      ItemAppearance.ProgressAppearance.BackGroundFill.ShadowOffset = 0
+      ItemAppearance.ProgressAppearance.BackGroundFill.Glow = gmNone
+      ItemAppearance.ProgressAppearance.ProgressFill.Color = 16773091
+      ItemAppearance.ProgressAppearance.ProgressFill.ColorTo = 16768452
+      ItemAppearance.ProgressAppearance.ProgressFill.ColorMirror = 16765357
+      ItemAppearance.ProgressAppearance.ProgressFill.ColorMirrorTo = 16767936
+      ItemAppearance.ProgressAppearance.ProgressFill.GradientType = gtVertical
+      ItemAppearance.ProgressAppearance.ProgressFill.GradientMirrorType = gtVertical
+      ItemAppearance.ProgressAppearance.ProgressFill.BorderColor = 16765357
+      ItemAppearance.ProgressAppearance.ProgressFill.Rounding = 0
+      ItemAppearance.ProgressAppearance.ProgressFill.ShadowOffset = 0
+      ItemAppearance.ProgressAppearance.ProgressFill.Glow = gmNone
+      ItemAppearance.ProgressAppearance.Font.Charset = DEFAULT_CHARSET
+      ItemAppearance.ProgressAppearance.Font.Color = clWindowText
+      ItemAppearance.ProgressAppearance.Font.Height = -11
+      ItemAppearance.ProgressAppearance.Font.Name = 'Tahoma'
+      ItemAppearance.ProgressAppearance.Font.Style = []
+      ItemAppearance.ProgressAppearance.ProgressFont.Charset = DEFAULT_CHARSET
+      ItemAppearance.ProgressAppearance.ProgressFont.Color = clWindowText
+      ItemAppearance.ProgressAppearance.ProgressFont.Height = -11
+      ItemAppearance.ProgressAppearance.ProgressFont.Name = 'Tahoma'
+      ItemAppearance.ProgressAppearance.ProgressFont.Style = []
+      ItemAppearance.ProgressAppearance.ValueFormat = '%.0f%%'
+      ItemAppearance.ButtonAppearance.Font.Charset = DEFAULT_CHARSET
+      ItemAppearance.ButtonAppearance.Font.Color = clWindowText
+      ItemAppearance.ButtonAppearance.Font.Height = -11
+      ItemAppearance.ButtonAppearance.Font.Name = 'Tahoma'
+      ItemAppearance.ButtonAppearance.Font.Style = []
+      ItemAppearance.InfoFill.ColorMirror = clNone
+      ItemAppearance.InfoFill.ColorMirrorTo = clNone
+      ItemAppearance.InfoFill.GradientType = gtVertical
+      ItemAppearance.InfoFill.GradientMirrorType = gtSolid
+      ItemAppearance.InfoFill.BorderColor = clNone
+      ItemAppearance.InfoFill.Rounding = 0
+      ItemAppearance.InfoFill.ShadowOffset = 0
+      ItemAppearance.InfoFill.Glow = gmNone
+      ItemAppearance.InfoFillSelected.ColorMirror = clNone
+      ItemAppearance.InfoFillSelected.ColorMirrorTo = clNone
+      ItemAppearance.InfoFillSelected.GradientType = gtVertical
+      ItemAppearance.InfoFillSelected.GradientMirrorType = gtSolid
+      ItemAppearance.InfoFillSelected.BorderColor = clNone
+      ItemAppearance.InfoFillSelected.Rounding = 0
+      ItemAppearance.InfoFillSelected.ShadowOffset = 0
+      ItemAppearance.InfoFillSelected.Glow = gmNone
+      ItemAppearance.InfoFillDisabled.ColorMirror = clNone
+      ItemAppearance.InfoFillDisabled.ColorMirrorTo = clNone
+      ItemAppearance.InfoFillDisabled.GradientType = gtVertical
+      ItemAppearance.InfoFillDisabled.GradientMirrorType = gtSolid
+      ItemAppearance.InfoFillDisabled.BorderColor = clNone
+      ItemAppearance.InfoFillDisabled.Rounding = 0
+      ItemAppearance.InfoFillDisabled.ShadowOffset = 0
+      ItemAppearance.InfoFillDisabled.Glow = gmNone
+      ItemAppearance.DeleteButtonCaption = 'Delete'
+      ItemAppearance.DeleteButtonFont.Charset = DEFAULT_CHARSET
+      ItemAppearance.DeleteButtonFont.Color = clWhite
+      ItemAppearance.DeleteButtonFont.Height = -11
+      ItemAppearance.DeleteButtonFont.Name = 'Tahoma'
+      ItemAppearance.DeleteButtonFont.Style = [fsBold]
+      LookupBar.DisabledFont.Charset = DEFAULT_CHARSET
+      LookupBar.DisabledFont.Color = clSilver
+      LookupBar.DisabledFont.Height = -11
+      LookupBar.DisabledFont.Name = 'Tahoma'
+      LookupBar.DisabledFont.Style = []
+      LookupBar.Font.Charset = DEFAULT_CHARSET
+      LookupBar.Font.Color = clWindowText
+      LookupBar.Font.Height = -11
+      LookupBar.Font.Name = 'Tahoma'
+      LookupBar.Font.Style = []
+      Sections.Font.Charset = DEFAULT_CHARSET
+      Sections.Font.Color = clWindowText
+      Sections.Font.Height = -11
+      Sections.Font.Name = 'Tahoma'
+      Sections.Font.Style = []
+      Sections.BorderColor = clBlack
+      SelectedItemIndex = -1
+      Header.Fill.Color = 16773091
+      Header.Fill.ColorTo = 16765615
+      Header.Fill.ColorMirror = clNone
+      Header.Fill.ColorMirrorTo = clNone
+      Header.Fill.GradientType = gtVertical
+      Header.Fill.GradientMirrorType = gtSolid
+      Header.Fill.BorderColor = 16765615
+      Header.Fill.Rounding = 0
+      Header.Fill.ShadowOffset = 0
+      Header.Fill.Glow = gmNone
+      Header.Caption = 'Header'
+      Header.Font.Charset = DEFAULT_CHARSET
+      Header.Font.Color = 7485192
+      Header.Font.Height = -13
+      Header.Font.Name = 'Tahoma'
+      Header.Font.Style = []
+      Filter.Fill.Color = 16773091
+      Filter.Fill.ColorMirror = clNone
+      Filter.Fill.ColorMirrorTo = clNone
+      Filter.Fill.GradientType = gtSolid
+      Filter.Fill.GradientMirrorType = gtSolid
+      Filter.Fill.BorderColor = 16765615
+      Filter.Fill.Rounding = 0
+      Filter.Fill.ShadowOffset = 0
+      Filter.Fill.Glow = gmNone
+      Footer.Fill.Color = 16773091
+      Footer.Fill.ColorTo = 16765615
+      Footer.Fill.ColorMirror = clNone
+      Footer.Fill.ColorMirrorTo = clNone
+      Footer.Fill.GradientType = gtVertical
+      Footer.Fill.GradientMirrorType = gtSolid
+      Footer.Fill.BorderColor = 16765615
+      Footer.Fill.Rounding = 0
+      Footer.Fill.ShadowOffset = 0
+      Footer.Fill.Glow = gmNone
+      Footer.Caption = 'Footer'
+      Footer.Font.Charset = DEFAULT_CHARSET
+      Footer.Font.Color = 7485192
+      Footer.Font.Height = -13
+      Footer.Font.Name = 'Tahoma'
+      Footer.Font.Style = []
+      DefaultItem.Caption = 'Item 0'
+      DefaultItem.CaptionFont.Charset = DEFAULT_CHARSET
+      DefaultItem.CaptionFont.Color = clWindowText
+      DefaultItem.CaptionFont.Height = -11
+      DefaultItem.CaptionFont.Name = 'Tahoma'
+      DefaultItem.CaptionFont.Style = []
+      DefaultItem.CaptionSelectedFont.Charset = DEFAULT_CHARSET
+      DefaultItem.CaptionSelectedFont.Color = clWindowText
+      DefaultItem.CaptionSelectedFont.Height = -11
+      DefaultItem.CaptionSelectedFont.Name = 'Tahoma'
+      DefaultItem.CaptionSelectedFont.Style = []
+      DefaultItem.InfoFont.Charset = DEFAULT_CHARSET
+      DefaultItem.InfoFont.Color = clWindowText
+      DefaultItem.InfoFont.Height = -11
+      DefaultItem.InfoFont.Name = 'Tahoma'
+      DefaultItem.InfoFont.Style = []
+      DefaultItem.InfoSelectedFont.Charset = DEFAULT_CHARSET
+      DefaultItem.InfoSelectedFont.Color = clWindowText
+      DefaultItem.InfoSelectedFont.Height = -11
+      DefaultItem.InfoSelectedFont.Name = 'Tahoma'
+      DefaultItem.InfoSelectedFont.Style = []
+      DefaultItem.NotesFont.Charset = DEFAULT_CHARSET
+      DefaultItem.NotesFont.Color = clWindowText
+      DefaultItem.NotesFont.Height = -11
+      DefaultItem.NotesFont.Name = 'Tahoma'
+      DefaultItem.NotesFont.Style = []
+      DefaultItem.NotesSelectedFont.Charset = DEFAULT_CHARSET
+      DefaultItem.NotesSelectedFont.Color = clWindowText
+      DefaultItem.NotesSelectedFont.Height = -11
+      DefaultItem.NotesSelectedFont.Name = 'Tahoma'
+      DefaultItem.NotesSelectedFont.Style = []
+      DefaultItem.ProgressMaximum = 100.000000000000000000
+      SelectionMode = sPersistSelection
+      Categories = <>
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      TabOrder = 0
+      DataBinding.CaptionField = 'FeatureID'
+      DataSource = DM.DSQuery
+      ExplicitWidth = 270
+      ExplicitHeight = 354
+      TMSStyle = 4
+    end
+  end
   object AdvSPopup: TAdvSmoothPopup
     FormStyle = fsNormal
     AutoSize = True
@@ -4265,7 +4490,7 @@ object FormMain: TFormMain
     Left = 443
     Top = 155
     Bitmap = {
-      494C010101000800280030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000800440030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C00000003000000001002000000000000090
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

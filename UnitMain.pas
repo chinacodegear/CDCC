@@ -13,7 +13,7 @@ uses
   W7Images, VCL.ExtCtrls, GisControlScale, GisControlNorthArrow, GisViewer3DInternal,
   VCL.ComCtrls, AdvOfficePager, AdvEdit, DBAdvEd, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls, DynVarsEh, EhLibVCL,
   GridsEh, DBAxisGridsEh, DBGridEh, PrnDbgeh, AdvMetroTile, AdvDateTimePicker, AdvDBDateTimePicker, AdvDBComboBox,
-  VCL.DBCtrls, DBAdvNavigator, AdvBadge, GisControl3D
+  VCL.DBCtrls, DBAdvNavigator, AdvBadge, GisControl3D, DBAdvSmoothListBox
     ;
 
 type
@@ -23,7 +23,6 @@ type
     AdvSmoothDock1: TAdvSmoothDock;
     ttkViewer: TGIS_ViewerWnd;
     W7Panel1: TW7Panel;
-    AdvExpanderPanel1: TAdvSmoothExpanderButtonPanel;
     AdvSPopup: TAdvSmoothPopup;
     AdvPopup4Map: TAdvPopupMenu;
     Zoom1: TMenuItem;
@@ -87,6 +86,8 @@ type
     ImageList48: TImageList;
     N7: TMenuItem;
     AdvComboBox1: TAdvComboBox;
+    AdvExpanderPanel1: TAdvSmoothExpanderPanel;
+    DBAdvSmoothListBox1: TDBAdvSmoothListBox;
     procedure AdvMetroFormCreate(Sender: TObject);
     procedure AdvSmoothDock1ItemClick(Sender: TObject; ItemIndex: Integer);
     procedure Drag1Click(Sender: TObject);
@@ -116,6 +117,8 @@ type
     procedure AdvSmoothComboBox1ItemChanged(Sender: TObject; ItemIndex: Integer);
     procedure N7Click(Sender: TObject);
     procedure AdvComboBox1Change(Sender: TObject);
+    procedure ttkViewerMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure AdvMetroFormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
     procedure Get00Feature(sFeatureID: string);
     procedure Get01Devices(sFeatureID: string);
@@ -134,7 +137,9 @@ type
     function RotaryMenuDialogStaus(AdvRotaryMenuDialog: TAdvSmoothRotaryMenuDialog; ActiveItemIndex: Integer = -1): Integer;
     function GetLayerID(AHallID: Integer): Integer; // 返回某馆号的当前激活图层号
     procedure ClearSelection(); // 清空所有图层选中的要素
-
+    function GetLayerTableName(const AFeatureID: string; ATable: Boolean = True): string; // 根据要素编号获取 所在图层的表名称
+    procedure ChangeLayer(const ALayerName: string); // 激活图层，同时隐藏同馆的其他图层
+    function GetCurrentLayer(AttkPoint: TGIS_Point): string; // 获取鼠标所在场馆图层名
   end;
 
 var
@@ -146,6 +151,9 @@ implementation
 
 
 uses UnitDBM, UnitMeta, UnitQuery;
+
+var
+  formQuery: TFormQuery;
 
 procedure TFormMain.OnPaintShapeLabel(const Sender: TObject; const shape: TGIS_Shape);
 begin
@@ -187,97 +195,41 @@ end;
 
 procedure TFormMain.AdvMetroButton1Click(Sender: TObject);
 var
-  sFID: string;
+  sFID, sLayerName, sLayerTable: string;
   I, iNone: Integer;
   ttkLayer: TGIS_LayerVector;
   ttkShape: TGIS_Shape;
 begin
-  DM.FDQuick.Close;
+
   iNone := 0;
   sFID := '[1-2]-[1-4]F-[A-G]-[0-9][0-9][0-9]';
-  if (TRegEx.IsMatch(CurvyEdit1.Text, sFID)) then
-  begin
-    CurvyEdit1.Font.Color := clGreen;
-    for I := 0 to FormMeta.LayerList.Items.Count - 1 do
-    begin
-      DM.FDQuick.Close;
-      DM.FDQuick.ParamByName('FID').Value := CurvyEdit1.Text + '%';
-      DM.FDQuick.MacroByName('TabName').Value := FormMeta.LayerList.Items.Strings[I] + '_FEA';
-      DM.FDQuick.Open;
 
-      ttkLayer := ttkViewer.Get(FormMeta.LayerList.Items.Strings[I]) as TGIS_LayerVector;
-      ttkLayer.RevertShapes;
+  sLayerName := GetLayerTableName(CurvyEdit1.Text, False);
+  sLayerTable := sLayerName + '_FEA';
 
-      iNone := DM.FDQuick.RecordCount;
-
-      if DM.FDQuick.RecordCount = 0 then
-      begin
-        // 清空无关图层的所有选中状态
-
-        Continue;
-      end;
-
-      if DM.FDQuick.RecordCount > 1 then
-      begin
-        // 向商铺面板填入
-
-        Break;
-      end;
-
-      if DM.FDQuick.RecordCount = 1 then
-      begin
-        // 直接定位到指定图层
-        case FormMeta.LayerList.Items.Strings[I].Chars[2] of
-          '1':
-            begin
-              ttkLayerH01.Active := False;
-              ttkLayerH01 := ttkLayer;
-              ttkLayerH01.Active := True;
-            end;
-          '2':
-            begin
-              ttkLayerH02.Active := False;
-              ttkLayerH02 := ttkLayer;
-              ttkLayerH02.Active := True;
-            end;
-          '3':
-            begin
-              ttkLayerH03.Active := False;
-              ttkLayerH03 := ttkLayer;
-              if Assigned(ttkLayerH03) then
-              begin
-                ttkLayerH03.Active := True;
-              end;
-            end;
-        end;
-
-        ttkShape := ttkLayer.GetShape(DM.FDQuick.FieldByName('UID').AsInteger);
-        ttkShape := ttkShape.MakeEditable;
-        ttkShape.IsSelected := True;
-        ttkViewer.Lock;
-
-        ttkViewer.VisibleExtent := ttkShape.Extent; // ttkLayer.Extent;
-        ttkViewer.Zoom := ttkViewer.Zoom * 0.1;
-
-        ttkViewer.Unlock;
-        Break;
-      end;
-    end;
-    if iNone <> 0 then
-      ttkViewer.Update
-    else
-    begin
-      ClearSelection;
-      ShowMessage('无此编号的商铺！');
-    end;
-  end
-  else
-  begin
-    CurvyEdit1.Font.Color := clRed;
-    ShowMessage('输入编号不规范！');
-    ClearSelection;
-  end;
   DM.FDQuick.Close;
+  DM.FDQuick.ParamByName('FID').Value := CurvyEdit1.Text;
+  DM.FDQuick.MacroByName('TabName').Value := sLayerTable;
+  DM.FDQuick.Open;
+
+  iNone := DM.FDQuick.RecordCount;
+  if iNone = 0 then
+  begin
+    ShowMessage('没有该编码的商铺!');
+    ClearSelection;
+    Exit;
+  end;
+
+  ttkLayer := ttkViewer.Get(sLayerName) as TGIS_LayerVector;
+  ttkLayer.RevertShapes;
+  ttkShape := ttkLayer.GetShape(DM.FDQuick.FieldByName('UID').AsInteger);
+  ttkShape := ttkShape.MakeEditable;
+  ttkShape.IsSelected := True;
+
+  ttkViewer.VisibleExtent := ttkShape.Extent; // ttkLayer.Extent;
+  ttkViewer.Zoom := ttkViewer.Zoom * 0.3;
+  ChangeLayer(sLayerName);
+  ttkViewer.Update;
 end;
 
 procedure TFormMain.AdvMetroButton6Click(Sender: TObject);
@@ -290,9 +242,18 @@ begin
   AdvSmoothRotaryMenuDialog1.StartAngle := 265;
   AdvSmoothRotaryMenuDialog1.StopAngle := 360;
 
-  AdvSmoothRotaryMenuDialog1.Items[2].Enabled := FormMeta.HalLayer.Items.Count = 3;
+  AdvSmoothRotaryMenuDialog1.Items[2].Enabled := False; // FormMeta.HalLayer.Items.Count = 3;
 
   AdvSmoothRotaryMenuDialog1.PopupMenuAtControl(AdvMetroButton7);
+end;
+
+procedure TFormMain.AdvMetroFormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+
+  ttkViewer.Close;
+  DM.FDConn.Close;
+  DM.GeoDBC.Close;
+  formQuery.Free;
 end;
 
 procedure TFormMain.AdvMetroFormCreate(Sender: TObject);
@@ -336,41 +297,38 @@ begin
   ttkLayerH02 := ttkViewer.Get('L0201') as TGIS_LayerVector;
 
   ttkLayerH01.ParamsList.LoadFromFile('S1329058843.ini');
-  ttkLayerH02.ParamsList.LoadFromFile('S1329058843.ini');
+  ttkLayerH02.ParamsList.LoadFromFile('S1329058843.ini'); // S1329598812.ini
   ttkViewer.Update;;
   //
 end;
 
 procedure TFormMain.AdvSmoothComboBox1ItemChanged(Sender: TObject; ItemIndex: Integer);
 begin
-  // ttkLayerH01.Lock;
-
   if ttkLayerH01.Active then
     ttkLayerH01.PaintLabel;
-  // ttkLayerH01.Unlock;
 
-  // ttkLayerH02.Lock;
   if ttkLayerH02.Active then
     ttkLayerH02.PaintLabel;
-  // ttkLayerH02.Unlock;
 
-  // ttkViewer.SetFocus;
-  // ttkViewer.Unlock;
   ttkViewer.Update;
-  // Application.ProcessMessages;;
 end;
 
 procedure TFormMain.AdvSmoothDock1ItemClick(Sender: TObject; ItemIndex: Integer);
-var
-  formQuery: TFormQuery;
 begin
-  // ShowMessage(ItemIndex.ToString);
-  // TMSForm2.ShowModal;
   case ItemIndex of
     0: // 综合查询
       begin
-        formQuery := TFormQuery.Create(nil);
-        formQuery.ShowModal;
+
+        if Assigned(formQuery) then
+        begin
+          formQuery.Show;
+          // ShowMessage('');
+        end
+        else
+        begin
+          formQuery := TFormQuery.Create(Self);
+          formQuery.Show;
+        end;
       end;
   end;
 end;
@@ -403,16 +361,54 @@ begin
 end;
 
 procedure TFormMain.AdvSmoothRotaryMenuDialog2MenuItemClick(Sender: TObject; AItemIndex: Integer);
+var
+  ttkLayer: TGIS_LayerVector;
 begin
+
   sLayerName := sLayerName + AdvSmoothRotaryMenuDialog2.Items[AItemIndex].Hint;
+  // ttkLayer := ttkViewer.Get(sLayerName) as TGIS_LayerVector;
+
   RotaryMenuDialogStaus(AdvSmoothRotaryMenuDialog2, AItemIndex);
-  Self.Text := sLayerName;
+  AdvSmoothRotaryMenuDialog2.ClosePopupMenu;
+  // Self.Text := sLayerName;
+  ChangeLayer(sLayerName);
 
 end;
 
 procedure TFormMain.AdvSPopupFooterClick(Sender: TObject);
 begin
   AdvSPopup.ClosePopup;
+end;
+
+procedure TFormMain.ChangeLayer(const ALayerName: string);
+var
+  ttkLayer: TGIS_LayerVector;
+begin
+  ttkLayer := ttkViewer.Get(ALayerName) as TGIS_LayerVector;
+  case ALayerName.Chars[2] of // L0102 代表馆号，同一馆只有一个图层可见
+    '1':
+      begin
+        ttkLayerH01.Active := False;
+        ttkLayerH01 := ttkLayer;
+        ttkLayerH01.Active := True;
+      end;
+    '2':
+      begin
+        ttkLayerH02.Active := False;
+        ttkLayerH02 := ttkLayer;
+        ttkLayerH02.Active := True;
+      end;
+    '3':
+      begin
+        ttkLayerH03.Active := False;
+        ttkLayerH03 := ttkLayer;
+        if Assigned(ttkLayerH03) then
+        begin
+          ttkLayerH03.Active := True;
+        end;
+      end;
+  end;
+  ttkViewer.Update;
 end;
 
 procedure TFormMain.ClearSelection;
@@ -449,6 +445,33 @@ begin
     AdvOfficePager13.Enabled := True;
     AdvMetroTile1.Caption := '合同文本';
   end;
+end;
+
+function TFormMain.GetCurrentLayer(AttkPoint: TGIS_Point): string;
+var
+  I: Integer;
+  ttkLayer: TGIS_LayerVector;
+begin
+  Result := '';
+  for I := 0 to ttkViewer.Items.Count - 1 do
+  begin
+    ttkLayer := ttkViewer.Items[I] as TGIS_LayerVector;
+    if ttkLayer.Active then
+    begin
+      if (AttkPoint.X < ttkLayer.Extent.XMax) and (AttkPoint.X > ttkLayer.Extent.XMin)
+        and (AttkPoint.Y < ttkLayer.Extent.YMax) and (AttkPoint.Y > ttkLayer.Extent.YMin)
+      then
+      begin
+        Result := ttkLayer.Name;
+        Break;
+      end;
+    end
+    else
+    begin
+      Continue;
+    end;
+  end;
+
 end;
 
 procedure TFormMain.Get02PayFees(sFeatureID: string);
@@ -496,10 +519,12 @@ begin
   if (TRegEx.IsMatch(CurvyEdit1.Text, sFID)) then
   begin
     CurvyEdit1.Font.Color := clGreen;
+    AdvMetroButton1.Enabled := True;
   end
   else
   begin
     CurvyEdit1.Font.Color := clRed;
+    AdvMetroButton1.Enabled := False;
   end;;
 end;
 
@@ -537,6 +562,51 @@ begin
     end;
   end;
 
+end;
+
+function TFormMain.GetLayerTableName(const AFeatureID: string; ATable: Boolean = True): string;
+var
+  sFID: string;
+begin
+  Result := '';
+  sFID := '[1-2]-[1-4]F-[A-G]-[0-9][0-9][0-9]'; // 1-1F-
+  if (TRegEx.IsMatch(AFeatureID, sFID)) then
+  begin
+    case AFeatureID.Chars[0] of
+      '1':
+        begin
+          Result := 'L01';
+        end;
+      '2':
+        begin
+          Result := 'L02';
+        end;
+      '3':
+        begin
+          Result := 'L03';
+        end;
+    end;
+
+    case AFeatureID.Chars[2] of
+      '1':
+        begin
+          Result := Result + '01';
+        end;
+      '2':
+        begin
+          Result := Result + '02';
+        end;
+      '3':
+        begin
+          Result := Result + '03';
+        end;
+    end;
+
+    if ATable then
+    begin
+      Result := Result + '_FEA';
+    end;
+  end;
 end;
 
 procedure TFormMain.N1Click(Sender: TObject);
@@ -698,6 +768,17 @@ begin
   ttkViewer.Add(ttkSQLayer);
 end;
 
+procedure TFormMain.ttkViewerMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+var
+  ttkShape: TGIS_Shape;
+  ttkPoint: TGIS_Point;
+begin
+
+  ttkPoint := ttkViewer.ScreenToMap(Point(X, Y));
+  Self.Text := GetCurrentLayer(ttkPoint);
+
+end;
+
 procedure TFormMain.ttkViewerMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   ttkShape: TGIS_Shape;
@@ -706,7 +787,7 @@ var
   xPoint: TPoint;
 begin
   if ttkViewer.IsEmpty then
-    exit;
+    Exit;
   ttkPoint := ttkViewer.ScreenToMap(Point(X, Y));
   xPoint := ttkViewer.ClientToScreen(Point(X, Y));
 
@@ -784,50 +865,53 @@ end;
 
 procedure TFormMain.ttkViewerMouseWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
 var
-  pt : TPoint ;
-  cam: TGIS_Point3D ;
+  pt: TPoint;
+  cam: TGIS_Point3D;
 begin
-  if ttkViewer.IsEmpty then exit ;
+  if ttkViewer.IsEmpty then
+    Exit;
 
-  pt := ttkViewer.ScreenToClient( MousePos ) ;
+  pt := ttkViewer.ScreenToClient(MousePos);
 
-  if ttkViewer.View3D then begin
+  if ttkViewer.View3D then
+  begin
     // allows MouseWheel works properly in ZoomMode
-    ttkViewer.Viewer3D.StoreMousePos( pt ) ;
+    ttkViewer.Viewer3D.StoreMousePos(pt);
 
-    cam := ttkViewer.Viewer3D.CameraPosition ;
-    cam.Z := cam.Z  / ( 1 + 0.05 ) ;
-    ttkViewer.Viewer3D.CameraPosition := cam ;
+    cam := ttkViewer.Viewer3D.CameraPosition;
+    cam.Z := cam.Z / (1 + 0.05);
+    ttkViewer.Viewer3D.CameraPosition := cam;
   end
   else
-    ttkViewer.ZoomBy( 3/2, pt.X, pt.Y );
+    ttkViewer.ZoomBy(3 / 2, pt.X, pt.Y);
 
-  Handled := True ;
+  Handled := True;
 end;
 
 procedure TFormMain.ttkViewerMouseWheelUp(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
 var
-  pt : TPoint ;
-  cam: TGIS_Point3D ;
+  pt: TPoint;
+  cam: TGIS_Point3D;
 begin
-  if ttkViewer.IsEmpty then exit ;
+  if ttkViewer.IsEmpty then
+    Exit;
 
-  pt := ttkViewer.ScreenToClient( MousePos ) ;
+  pt := ttkViewer.ScreenToClient(MousePos);
 
-  if ttkViewer.View3D then begin
+  if ttkViewer.View3D then
+  begin
     // allows MouseWheel works properly in ZoomMode
-    ttkViewer.Viewer3D.StoreMousePos( pt ) ;
+    ttkViewer.Viewer3D.StoreMousePos(pt);
 
-    cam := ttkViewer.Viewer3D.CameraPosition ;
-    cam.Z := cam.Z  * ( 1 + 0.05 ) ;
-    ttkViewer.Viewer3D.CameraPosition := cam ;
+    cam := ttkViewer.Viewer3D.CameraPosition;
+    cam.Z := cam.Z * (1 + 0.05);
+    ttkViewer.Viewer3D.CameraPosition := cam;
   end
   else
-    ttkViewer.ZoomBy( 2/3, pt.X, pt.Y );
+    ttkViewer.ZoomBy(2 / 3, pt.X, pt.Y);
 
-  Handled := True ;
+  Handled := True;
 end;
-
 
 procedure TFormMain.WMEnterSizeMove(var Message: TMessage);
 begin
