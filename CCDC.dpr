@@ -6,7 +6,8 @@ uses
   UnitDBM in 'UnitDBM.pas' {DM: TDataModule} ,
   UnitLogin in 'UnitLogin.pas' {FormLogin: TAdvMetroForm} ,
   UnitMeta in 'UnitMeta.pas' {FormMeta: TAdvMetroForm} ,
-  UnitQuery in 'UnitQuery.pas' {FormQuery: TAdvMetroForm};
+  UnitQuery in 'UnitQuery.pas' {FormQuery: TAdvMetroForm} ,
+  UnitFind in 'UnitFind.pas' {FormFind: TAdvMetroForm};
 
 {$R *.res}
 
@@ -19,6 +20,7 @@ begin
   Application.MainFormOnTaskBar := True;
   Application.CreateForm(TDM, DM);
   Application.CreateForm(TFormMain, FormMain);
+  // Application.CreateForm(TFormFind, FormFind);
   // Application.CreateForm(TFormMeta, FormMeta);
   // Application.CreateForm(TFormQuery, FormQuery);
   // FormLogin := TFormLogin.Create(nil);

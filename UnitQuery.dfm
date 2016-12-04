@@ -5,8 +5,8 @@ object FormQuery: TFormQuery
   BorderStyle = bsNone
   BorderWidth = 1
   Caption = #32508#21512#26597#35810
-  ClientHeight = 662
-  ClientWidth = 526
+  ClientHeight = 600
+  ClientWidth = 518
   Color = clWindow
   Constraints.MinHeight = 26
   Constraints.MinWidth = 100
@@ -18,7 +18,7 @@ object FormQuery: TFormQuery
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  Position = poScreenCenter
+  Position = poDesigned
   OnCreate = AdvMetroFormCreate
   OnShow = AdvMetroFormShow
   Appearance.SystemIconColorDisabled = 5921370
@@ -28,6 +28,7 @@ object FormQuery: TFormQuery
   Appearance.CaptionFont.Name = 'Segoe UI'
   Appearance.CaptionFont.Style = []
   Appearance.CaptionColor = 11576180
+  Appearance.CaptionStyle = csPlain
   Appearance.CaptionActiveColor = 15907840
   Appearance.Font.Charset = DEFAULT_CHARSET
   Appearance.Font.Color = clWhite
@@ -40,7 +41,7 @@ object FormQuery: TFormQuery
   TextHeight = 13
   object AdvGroupBox2: TAdvGroupBox
     Left = 0
-    Top = 270
+    Top = 238
     Width = 518
     Height = 145
     BorderColor = clBlue
@@ -59,7 +60,7 @@ object FormQuery: TFormQuery
       CheckBox.Themed = False
       RoundEdges = True
       TabOrder = 0
-      object AdvDateTimePicker5: TAdvDateTimePicker
+      object AdvFeeBegin: TAdvDateTimePicker
         Left = 69
         Top = 12
         Width = 129
@@ -88,7 +89,7 @@ object FormQuery: TFormQuery
         LabelFont.Name = 'Tahoma'
         LabelFont.Style = []
       end
-      object AdvDateTimePicker6: TAdvDateTimePicker
+      object AdvFeeEnd: TAdvDateTimePicker
         Left = 281
         Top = 12
         Width = 129
@@ -118,7 +119,7 @@ object FormQuery: TFormQuery
         LabelFont.Style = []
       end
     end
-    object AdvOfficeRadioGroup1: TAdvOfficeRadioGroup
+    object AdvRGFee: TAdvOfficeRadioGroup
       Left = 24
       Top = 27
       Width = 413
@@ -196,11 +197,12 @@ object FormQuery: TFormQuery
       PictureAutoColor = False
       TabOrder = 2
       Version = '1.1.2.0'
+      OnClick = AdvMetroTile3Click
     end
   end
   object AdvGroupBox1: TAdvGroupBox
     Left = 0
-    Top = 94
+    Top = 68
     Width = 518
     Height = 170
     BorderColor = clBlue
@@ -510,7 +512,7 @@ object FormQuery: TFormQuery
   end
   object AdvMetroTile2: TAdvMetroTile
     Left = 493
-    Top = 46
+    Top = 72
     Width = 25
     Height = 21
     Appearance.BorderColor = clHighlight
@@ -531,7 +533,7 @@ object FormQuery: TFormQuery
   end
   object AdvGroupBox6: TAdvGroupBox
     Left = 0
-    Top = 26
+    Top = 0
     Width = 518
     Height = 68
     BorderColor = clBlue
@@ -653,7 +655,7 @@ object FormQuery: TFormQuery
   end
   object AdvGroupBox3: TAdvGroupBox
     Left = 0
-    Top = 421
+    Top = 383
     Width = 518
     Height = 208
     BorderColor = clBlue

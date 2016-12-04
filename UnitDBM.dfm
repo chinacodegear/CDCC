@@ -65,12 +65,12 @@ object DM: TDM
   end
   object FDGUIxWaitCursor1: TFDGUIxWaitCursor
     Provider = 'Forms'
-    Left = 123
-    Top = 457
+    Left = 546
+    Top = 466
   end
   object FDPhysMSSQLDriverLink1: TFDPhysMSSQLDriverLink
-    Left = 251
-    Top = 450
+    Left = 538
+    Top = 414
   end
   object FDQuery: TFDQuery
     Connection = FDConn
@@ -303,8 +303,8 @@ object DM: TDM
   end
   object FDGUIxAsyncExecuteDialog1: TFDGUIxAsyncExecuteDialog
     Provider = 'Forms'
-    Left = 394
-    Top = 462
+    Left = 533
+    Top = 356
   end
   object FDQuery2: TFDQuery
     Connection = FDConn
@@ -431,6 +431,81 @@ object DM: TDM
         DataType = ftString
         ParamType = ptInput
         Value = Null
+      end>
+  end
+  object FDQuery4: TFDQuery
+    Connection = FDConn
+    FetchOptions.AssignedValues = [evRecordCountMode]
+    FetchOptions.RecordCountMode = cmTotal
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
+    SQL.Strings = (
+      'select featureid,feekind from t02payfees '
+      'group by featureid ,feekind '
+      'having max(feeend)<getdate() '
+      'order by featureid;')
+    Left = 191
+    Top = 400
+  end
+  object FDQFind: TFDQuery
+    Connection = FDConn
+    FetchOptions.AssignedValues = [evRecordCountMode]
+    FetchOptions.RecordCountMode = cmTotal
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
+    SQL.Strings = (
+      'select FeatureID,GrossArea,UsableArea,RentPrice,'
+      'PropPrice,RentOff'
+      'from T00Features '
+      'where '
+      'FeatureID like :FeatureID'
+      'and FeatureStatus = '#39#26410#31199#39
+      'and &AreaFiled >= :beginArea'
+      'and &AreaFiled <= :endArea'
+      'and UsableArea*RentPrice*365*(1-RentOff) >= :beginRent'
+      'and UsableArea*RentPrice*365*(1-RentOff) <= :endRent'
+      '')
+    Left = 101
+    Top = 446
+    ParamData = <
+      item
+        Name = 'FEATUREID'
+        DataType = ftString
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'BEGINAREA'
+        DataType = ftFloat
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'ENDAREA'
+        DataType = ftFloat
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'BEGINRENT'
+        DataType = ftFloat
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'ENDRENT'
+        DataType = ftFloat
+        ParamType = ptInput
+        Value = Null
+      end>
+    MacroData = <
+      item
+        Value = Null
+        Name = 'AREAFILED'
       end>
   end
 end

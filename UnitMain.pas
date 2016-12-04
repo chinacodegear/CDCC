@@ -88,6 +88,7 @@ type
     AdvComboBox1: TAdvComboBox;
     AdvExpanderPanel1: TAdvSmoothExpanderPanel;
     DBAdvSmoothListBox1: TDBAdvSmoothListBox;
+    DBNavigator1: TDBNavigator;
     procedure AdvMetroFormCreate(Sender: TObject);
     procedure AdvSmoothDock1ItemClick(Sender: TObject; ItemIndex: Integer);
     procedure Drag1Click(Sender: TObject);
@@ -119,6 +120,7 @@ type
     procedure AdvComboBox1Change(Sender: TObject);
     procedure ttkViewerMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure AdvMetroFormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure DBAdvSmoothListBox1ItemDblClick(Sender: TObject; ItemIndex: Integer);
   private
     procedure Get00Feature(sFeatureID: string);
     procedure Get01Devices(sFeatureID: string);
@@ -150,10 +152,11 @@ implementation
 {$R *.dfm}
 
 
-uses UnitDBM, UnitMeta, UnitQuery;
+uses UnitDBM, UnitMeta, UnitQuery, UnitFind;
 
 var
   formQuery: TFormQuery;
+  formFind: TFormFind;
 
 procedure TFormMain.OnPaintShapeLabel(const Sender: TObject; const shape: TGIS_Shape);
 begin
@@ -305,10 +308,10 @@ end;
 procedure TFormMain.AdvSmoothComboBox1ItemChanged(Sender: TObject; ItemIndex: Integer);
 begin
   if ttkLayerH01.Active then
-    ttkLayerH01.PaintLabel;
+      ttkLayerH01.PaintLabel;
 
   if ttkLayerH02.Active then
-    ttkLayerH02.PaintLabel;
+      ttkLayerH02.PaintLabel;
 
   ttkViewer.Update;
 end;
@@ -318,7 +321,6 @@ begin
   case ItemIndex of
     0: // 综合查询
       begin
-
         if Assigned(formQuery) then
         begin
           formQuery.Show;
@@ -328,6 +330,20 @@ begin
         begin
           formQuery := TFormQuery.Create(Self);
           formQuery.Show;
+        end;
+      end;
+
+    1: // 商铺选址
+      begin
+        if Assigned(formFind) then
+        begin
+          formFind.Show;
+          // ShowMessage('');
+        end
+        else
+        begin
+          formFind := TFormFind.Create(Self);
+          formFind.Show;
         end;
       end;
   end;
@@ -506,8 +522,9 @@ begin
   begin
     DBAdvEdit9.Suffix := ' %';
     DBAdvEdit9.Text := (DM.FDQ00.FieldByName('rentoff').AsSingle * 100).ToString;
-    DBAdvEdit10.Text := (DM.FDQ00.FieldByName('rentoff').AsSingle * 365 * DM.FDQ00.FieldByName('rentprice')
-      .AsSingle).ToString;
+    DBAdvEdit10.Text := (
+      (1 - DM.FDQ00.FieldByName('rentoff').AsSingle) * 365 * DM.FDQ00.FieldByName('rentprice').AsSingle *
+      DM.FDQ00.FieldByName('usablearea').AsSingle).ToString;
   end;
 end;
 
@@ -526,6 +543,12 @@ begin
     CurvyEdit1.Font.Color := clRed;
     AdvMetroButton1.Enabled := False;
   end;;
+end;
+
+procedure TFormMain.DBAdvSmoothListBox1ItemDblClick(Sender: TObject; ItemIndex: Integer);
+begin
+  CurvyEdit1.Text := DBAdvSmoothListBox1.Items[ItemIndex].Caption;
+  AdvMetroButton1.Click;
 end;
 
 procedure TFormMain.Drag1Click(Sender: TObject);
@@ -599,6 +622,10 @@ begin
       '3':
         begin
           Result := Result + '03';
+        end;
+      '4':
+        begin
+          Result := Result + '04';
         end;
     end;
 
@@ -693,14 +720,14 @@ begin
   begin
     PrintDBGridEh1.DBGridEh := DBGridEhFeePay;
     if DM.FDQ02.RecordCount > 0 then
-      PrintDBGridEh1.Preview;
+        PrintDBGridEh1.Preview;
   end;
 
   if AdvOfficePager1.ActivePageIndex = 1 then
   begin
     PrintDBGridEh1.DBGridEh := DBGridEhDevice;
     if DM.FDQ01.RecordCount > 0 then
-      PrintDBGridEh1.Preview;
+        PrintDBGridEh1.Preview;
   end;
 
 end;
@@ -738,7 +765,7 @@ begin
     for I := 0 to AdvRotaryMenuDialog.Items.Count - 1 do
     begin
       if ActiveItemIndex <> I then
-        AdvRotaryMenuDialog.Items[I].Down := False
+          AdvRotaryMenuDialog.Items[I].Down := False
       else
       begin
         AdvRotaryMenuDialog.Items[I].Down := True;
@@ -764,7 +791,7 @@ begin
   ttkSQLayer.OnPaintShapeLabel := OnPaintShapeLabel;
   ttkSQLayer.Active := AVisible;
   if AStyleName <> '' then
-    ttkSQLayer.SQLParameter['STYLE'] := AStyleName;
+      ttkSQLayer.SQLParameter['STYLE'] := AStyleName;
   ttkViewer.Add(ttkSQLayer);
 end;
 
@@ -787,7 +814,7 @@ var
   xPoint: TPoint;
 begin
   if ttkViewer.IsEmpty then
-    Exit;
+      Exit;
   ttkPoint := ttkViewer.ScreenToMap(Point(X, Y));
   xPoint := ttkViewer.ClientToScreen(Point(X, Y));
 
@@ -849,7 +876,7 @@ begin
                   ttkLayerH01.DeselectAll;
                   ttkLayerH02.DeselectAll;
                   if ttkLayerH03 <> nil then
-                    ttkLayerH03.DeselectAll;
+                      ttkLayerH03.DeselectAll;
                 end;
               end;
           end;
@@ -869,7 +896,7 @@ var
   cam: TGIS_Point3D;
 begin
   if ttkViewer.IsEmpty then
-    Exit;
+      Exit;
 
   pt := ttkViewer.ScreenToClient(MousePos);
 
@@ -883,7 +910,7 @@ begin
     ttkViewer.Viewer3D.CameraPosition := cam;
   end
   else
-    ttkViewer.ZoomBy(3 / 2, pt.X, pt.Y);
+      ttkViewer.ZoomBy(3 / 2, pt.X, pt.Y);
 
   Handled := True;
 end;
@@ -894,7 +921,7 @@ var
   cam: TGIS_Point3D;
 begin
   if ttkViewer.IsEmpty then
-    Exit;
+      Exit;
 
   pt := ttkViewer.ScreenToClient(MousePos);
 
@@ -908,7 +935,7 @@ begin
     ttkViewer.Viewer3D.CameraPosition := cam;
   end
   else
-    ttkViewer.ZoomBy(2 / 3, pt.X, pt.Y);
+      ttkViewer.ZoomBy(2 / 3, pt.X, pt.Y);
 
   Handled := True;
 end;

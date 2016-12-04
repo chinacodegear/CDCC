@@ -7,8 +7,8 @@ object FormMain: TFormMain
   Align = alClient
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = #20013#22269#19996#28023#27700#26230#22478' GIS '#31995#32479
-  ClientHeight = 562
-  ClientWidth = 806
+  ClientHeight = 591
+  ClientWidth = 830
   Color = clWindow
   Constraints.MinHeight = 300
   Constraints.MinWidth = 100
@@ -42,8 +42,8 @@ object FormMain: TFormMain
   NoDropShadow = True
   Text = ''
   DesignSize = (
-    806
-    562)
+    830
+    591)
   PixelsPerInch = 96
   TextHeight = 13
   object ttkViewer: TGIS_ViewerWnd
@@ -438,7 +438,7 @@ object FormMain: TFormMain
   object AdvSmoothDock1: TAdvSmoothDock
     Left = 332
     Top = 17
-    Width = 381
+    Width = 333
     Height = 24
     AutoSize = False
     Fill.Color = 12184289
@@ -899,12 +899,13 @@ object FormMain: TFormMain
     TabOrder = 2
     ParentShowHint = False
     ShowHint = True
+    ExplicitWidth = 530
     TMSStyle = 2
   end
   object W7Panel1: TW7Panel
     Left = 0
-    Top = 537
-    Width = 806
+    Top = 566
+    Width = 830
     Height = 25
     Margins.Left = 0
     Margins.Top = 0
@@ -929,9 +930,10 @@ object FormMain: TFormMain
     Align = alBottom
     ParentFont = False
     TabOrder = 4
-    ExplicitWidth = 824
+    ExplicitTop = 537
+    ExplicitWidth = 806
     object AdvMetroButton2: TAdvMetroButton
-      Left = 791
+      Left = 797
       Top = 0
       Width = 33
       Height = 25
@@ -962,9 +964,10 @@ object FormMain: TFormMain
       ShowHint = True
       TabOrder = 0
       Version = '1.1.2.0'
+      ExplicitLeft = 773
     end
     object AdvMetroButton3: TAdvMetroButton
-      Left = 758
+      Left = 764
       Top = 0
       Width = 33
       Height = 25
@@ -1005,9 +1008,10 @@ object FormMain: TFormMain
       Style = tasCheck
       TabOrder = 1
       Version = '1.1.2.0'
+      ExplicitLeft = 740
     end
     object AdvMetroButton4: TAdvMetroButton
-      Left = 692
+      Left = 698
       Top = 0
       Width = 33
       Height = 25
@@ -1054,9 +1058,10 @@ object FormMain: TFormMain
       Style = tasCheck
       TabOrder = 2
       Version = '1.1.2.0'
+      ExplicitLeft = 674
     end
     object AdvMetroButton5: TAdvMetroButton
-      Left = 725
+      Left = 731
       Top = 0
       Width = 33
       Height = 25
@@ -1108,9 +1113,10 @@ object FormMain: TFormMain
       Style = tasCheck
       TabOrder = 3
       Version = '1.1.2.0'
+      ExplicitLeft = 707
     end
     object AdvSmoothComboBox1: TAdvSmoothComboBox
-      Left = 542
+      Left = 548
       Top = 0
       Width = 117
       Height = 30
@@ -1572,7 +1578,7 @@ object FormMain: TFormMain
       TMSStyle = 4
     end
     object AdvMetroButton6: TAdvMetroButton
-      Left = 659
+      Left = 665
       Top = 0
       Width = 33
       Height = 25
@@ -1618,6 +1624,7 @@ object FormMain: TFormMain
       TabOrder = 5
       Version = '1.1.2.0'
       OnClick = AdvMetroButton6Click
+      ExplicitLeft = 641
     end
     object AdvMetroButton7: TAdvMetroButton
       Left = 0
@@ -1697,7 +1704,7 @@ object FormMain: TFormMain
   end
   object GIS_ControlScale1: TGIS_ControlScale
     Left = 0
-    Top = 513
+    Top = 542
     Width = 185
     Height = 21
     GIS_Viewer = ttkViewer
@@ -1708,9 +1715,10 @@ object FormMain: TFormMain
     BorderStyle = bsSingle
     Color = clBtnFace
     TabOrder = 6
+    ExplicitTop = 513
   end
   object GIS_ControlNorthArrow1: TGIS_ControlNorthArrow
-    Left = 795
+    Left = 783
     Top = 8
     Width = 39
     Height = 41
@@ -3450,10 +3458,10 @@ object FormMain: TFormMain
     end
   end
   object AdvExpanderPanel1: TAdvSmoothExpanderPanel
-    Left = 648
-    Top = 119
-    Width = 171
-    Height = 397
+    Left = 631
+    Top = 65
+    Width = 191
+    Height = 495
     Cursor = crDefault
     CanMove = True
     Resizable = True
@@ -3483,6 +3491,7 @@ object FormMain: TFormMain
     Fill.ShadowType = stBottom
     Fill.Glow = gmNone
     Version = '1.1.1.0'
+    Anchors = [akTop, akRight, akBottom]
     TabOrder = 9
     ExpanderColor = 16445929
     ExpanderDownColor = 15587527
@@ -3490,15 +3499,15 @@ object FormMain: TFormMain
     ExpanderShape = esRounded
     MinimumPanelHeight = 23
     DesignSize = (
-      171
-      397)
+      191
+      495)
     TMSStyle = 4
-    OldHeight = 397.000000000000000000
+    OldHeight = 495.000000000000000000
     object DBAdvSmoothListBox1: TDBAdvSmoothListBox
       Left = 3
-      Top = 35
-      Width = 165
-      Height = 350
+      Top = 83
+      Width = 191
+      Height = 409
       Cursor = crDefault
       Fill.Color = 16445929
       Fill.ColorTo = 15587527
@@ -3685,6 +3694,7 @@ object FormMain: TFormMain
       Footer.Font.Height = -13
       Footer.Font.Name = 'Tahoma'
       Footer.Font.Style = []
+      OnItemDblClick = DBAdvSmoothListBox1ItemDblClick
       DefaultItem.Caption = 'Item 0'
       DefaultItem.CaptionFont.Charset = DEFAULT_CHARSET
       DefaultItem.CaptionFont.Color = clWindowText
@@ -3723,9 +3733,19 @@ object FormMain: TFormMain
       TabOrder = 0
       DataBinding.CaptionField = 'FeatureID'
       DataSource = DM.DSQuery
-      ExplicitWidth = 270
-      ExplicitHeight = 354
+      ExplicitHeight = 311
       TMSStyle = 4
+    end
+    object DBNavigator1: TDBNavigator
+      Left = 3
+      Top = 25
+      Width = 184
+      Height = 25
+      DataSource = DM.DSQuery
+      VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 1
+      ExplicitWidth = 164
     end
   end
   object AdvSPopup: TAdvSmoothPopup
@@ -4490,7 +4510,7 @@ object FormMain: TFormMain
     Left = 443
     Top = 155
     Bitmap = {
-      494C010101000800440030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000800480030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C00000003000000001002000000000000090
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

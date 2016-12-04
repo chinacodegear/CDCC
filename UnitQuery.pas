@@ -11,9 +11,9 @@ type
   TFormQuery = class(TAdvMetroForm)
     AdvGroupBox2: TAdvGroupBox;
     AdvGroupBox5: TAdvGroupBox;
-    AdvDateTimePicker5: TAdvDateTimePicker;
-    AdvDateTimePicker6: TAdvDateTimePicker;
-    AdvOfficeRadioGroup1: TAdvOfficeRadioGroup;
+    AdvFeeBegin: TAdvDateTimePicker;
+    AdvFeeEnd: TAdvDateTimePicker;
+    AdvRGFee: TAdvOfficeRadioGroup;
     AdvGroupBox1: TAdvGroupBox;
     UnitAdvEditBtn1: TUnitAdvEditBtn;
     AdvMetroTile2: TAdvMetroTile;
@@ -54,6 +54,7 @@ type
     procedure AdvComboBox5Change(Sender: TObject);
     procedure AdvGroupBox1CheckBoxClick(Sender: TObject);
     procedure AdvMetroTile5Click(Sender: TObject);
+    procedure AdvMetroTile3Click(Sender: TObject);
 
   private
     procedure SetButtonPanel;
@@ -115,22 +116,30 @@ procedure TFormQuery.AdvGroupBox1CheckBoxClick(Sender: TObject);
 begin
   if (Sender as TAdvGroupBox).CheckBox.Checked then
   begin
-    (Sender as TAdvGroupBox).BorderColor := clRed;
+    (Sender as TAdvGroupBox).BorderColor := clBlue;
   end
   else
   begin
-    (Sender as TAdvGroupBox).BorderColor := clBlue;
+    (Sender as TAdvGroupBox).BorderColor := clSilver;
   end;
 end;
 
 procedure TFormQuery.AdvMetroFormCreate(Sender: TObject);
 begin
-  AdvDateTimePicker5.Date := Now;
-  AdvDateTimePicker6.Date := Now;
-  AdvDateTimePicker5.Checked := False;
-  AdvDateTimePicker6.Checked := False;
+  AdvFeeBegin.Date := Now;
+  AdvFeeEnd.Date := Now;
+  advPactBegin.Date := Now;
+  advPactEnd.Date := Now;
+  AdvFeeBegin.Checked := False;
+  AdvFeeEnd.Checked := False;
+
+  advPactBegin.Checked := False;
+  advPactEnd.Checked := False;
+
   Self.AdvMetroTile2.Top := 4;
   sFilter := '%';
+  Self.Left := 0;
+  Self.Top := 27;
 end;
 
 procedure TFormQuery.AdvMetroFormShow(Sender: TObject);
@@ -144,9 +153,91 @@ end;
 
 procedure TFormQuery.AdvMetroTile2Click(Sender: TObject);
 begin
-  // Self.Hide;
-  Self.Height := Self.Height + 1;
-  UnitAdvEditBtn3.Text := Self.Height.ToString;
+  Self.Hide;
+  // Self.Height := Self.Height + 1;
+  // UnitAdvEditBtn3.Text := Self.Height.ToString;
+end;
+
+procedure TFormQuery.AdvMetroTile3Click(Sender: TObject);
+begin
+  case AdvRGFee.ItemIndex of
+    0: // 欠费商铺编号
+      begin
+        DM.FDQuery4.Close;
+        DM.FDQuery4.SQL.Text :=
+          'select featureid,feekind from t02payfees ' +
+          'group by featureid ,feekind having max(feeend)<getdate() ' +
+          'order by featureid;';
+        DM.FDQuery4.Open;
+        DM.DSQuery.DataSet := DM.FDQuery4;
+        FormMain.DBAdvSmoothListBox1.DataBinding.InfoField := 'feekind';
+        FormMain.AdvExpanderPanel1.Caption.Text := '商铺列表 [' + DM.FDQuery4.RecordCount.ToString + ']';
+        SetButtonPanel;
+      end;
+    1: // 不欠费商铺编号
+      begin
+        DM.FDQuery4.Close;
+        DM.FDQuery4.SQL.Text :=
+          'select featureid,feekind from t02payfees ' +
+          'group by featureid ,feekind having max(feeend)>=getdate() ' +
+          'order by featureid';
+        DM.FDQuery4.Open;
+        DM.DSQuery.DataSet := DM.FDQuery4;
+        FormMain.DBAdvSmoothListBox1.DataBinding.InfoField := 'feekind';
+        FormMain.AdvExpanderPanel1.Caption.Text := '商铺列表 [' + DM.FDQuery4.RecordCount.ToString + ']';
+        SetButtonPanel;
+      end;
+    2: // 到指定日期才 欠费
+      begin
+        if AdvFeeBegin.Checked or AdvFeeEnd.Checked then
+        begin
+          DM.FDQuery4.Close;
+          DM.FDQuery4.SQL.Text :=
+            'select featureid,feekind from t02payfees ' +
+            'group by featureid ,feekind having max(feeend)<:oweDate ' +
+            'order by featureid;';
+
+          if AdvFeeBegin.Checked then DM.FDQuery4.ParamByName('oweDate').AsDate := AdvFeeBegin.Date;
+          if AdvFeeEnd.Checked then DM.FDQuery4.ParamByName('oweDate').AsDate := AdvFeeEnd.Date;
+
+          DM.FDQuery4.Open;
+          DM.DSQuery.DataSet := DM.FDQuery4;
+          FormMain.DBAdvSmoothListBox1.DataBinding.InfoField := 'feekind';
+          FormMain.AdvExpanderPanel1.Caption.Text := '商铺列表 [' + DM.FDQuery4.RecordCount.ToString + ']';
+          SetButtonPanel;
+        end
+        else
+        begin
+          ShowMessage('请选择一个日期范围！');
+          FormMain.AdvExpanderPanel1.Visible := False;
+        end;
+      end;
+    3: // 缴费日期查询
+      begin
+        FormMain.DBAdvSmoothListBox1.DataBinding.InfoField := '';
+        DM.FDQuery4.Close;
+        DM.FDQuery4.SQL.Text :=
+          'select distinct featureid from t02payfees ' +
+          'where PayDate >= :beginDate and ' +
+          'PayDate <= :endDate';
+
+        if AdvFeeBegin.Checked then
+            DM.FDQuery4.ParamByName('beginDate').AsDate := AdvFeeBegin.Date
+        else
+            DM.FDQuery4.ParamByName('beginDate').AsDate := 1;
+
+        if AdvFeeEnd.Checked then
+            DM.FDQuery4.ParamByName('endDate').AsDate := AdvFeeEnd.Date
+        else
+            DM.FDQuery4.ParamByName('endDate').AsDate := 200 * 365;
+
+        DM.FDQuery4.Open;
+        DM.DSQuery.DataSet := DM.FDQuery4;
+        FormMain.AdvExpanderPanel1.Caption.Text := '商铺列表 [' + DM.FDQuery4.RecordCount.ToString + ']';
+        SetButtonPanel;
+      end;
+  end;
+
 end;
 
 procedure TFormQuery.AdvMetroTile4Click(Sender: TObject);
@@ -241,7 +332,7 @@ begin
     ShowMessage('请输入查询信息！');
     Exit;
   end;
-
+  FormMain.DBAdvSmoothListBox1.DataBinding.InfoField := '';
   DM.FDQuery.Close;
   DM.FDQuery.MacroByName('TableName').AsRaw := ATableName;
   DM.FDQuery.MacroByName('FID').AsRaw := AFieldName;
@@ -275,6 +366,7 @@ begin
     and
     FeatureStatus = :AFeatStatus
   }
+  FormMain.DBAdvSmoothListBox1.DataBinding.InfoField := '';
   DM.FDQuery2.Close;
   DM.FDQuery2.MacroByName('TableName').AsRaw := ATableName;
   DM.FDQuery2.MacroByName('FID').AsRaw := AFieldName; // 两个面积字段

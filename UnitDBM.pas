@@ -41,6 +41,8 @@ type
     FDQuery2: TFDQuery;
     DSQuery: TDataSource;
     FDQuery3: TFDQuery;
+    FDQuery4: TFDQuery;
+    FDQFind: TFDQuery;
     procedure GeoDBCBeforeConnect(Sender: TObject);
     procedure FDConnBeforeConnect(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);
