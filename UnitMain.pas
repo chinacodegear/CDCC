@@ -13,7 +13,7 @@ uses
   W7Images, VCL.ExtCtrls, GisControlScale, GisControlNorthArrow, GisViewer3DInternal,
   VCL.ComCtrls, AdvOfficePager, AdvEdit, DBAdvEd, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls, DynVarsEh, EhLibVCL,
   GridsEh, DBAxisGridsEh, DBGridEh, PrnDbgeh, AdvMetroTile, AdvDateTimePicker, AdvDBDateTimePicker, AdvDBComboBox,
-  VCL.DBCtrls, DBAdvNavigator, AdvBadge, GisControl3D, DBAdvSmoothListBox
+  VCL.DBCtrls, DBAdvNavigator, AdvBadge, GisControl3D, DBAdvSmoothListBox, VCL.ExtDlgs
     ;
 
 type
@@ -89,6 +89,9 @@ type
     AdvExpanderPanel1: TAdvSmoothExpanderPanel;
     DBAdvSmoothListBox1: TDBAdvSmoothListBox;
     DBNavigator1: TDBNavigator;
+    AdvMetroButton8: TAdvMetroButton;
+    AdvMetroButton9: TAdvMetroButton;
+    SavePictureDialog1: TSavePictureDialog;
     procedure AdvMetroFormCreate(Sender: TObject);
     procedure AdvSmoothDock1ItemClick(Sender: TObject; ItemIndex: Integer);
     procedure Drag1Click(Sender: TObject);
@@ -121,6 +124,10 @@ type
     procedure ttkViewerMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure AdvMetroFormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure DBAdvSmoothListBox1ItemDblClick(Sender: TObject; ItemIndex: Integer);
+    procedure AdvSPopupButtonClick(Sender: TObject; Index: Integer);
+    procedure AdvMetroButton4Click(Sender: TObject);
+    procedure AdvMetroButton2Click(Sender: TObject);
+    procedure AdvMetroButton3Click(Sender: TObject);
   private
     procedure Get00Feature(sFeatureID: string);
     procedure Get01Devices(sFeatureID: string);
@@ -132,8 +139,8 @@ type
     procedure OnPaintShapeLabel(const Sender: TObject; const shape: TGIS_Shape);
   public
     { Public declarations }
-    // 每个场馆当前激活的图层
-    ttkLayerH01, ttkLayerH02, ttkLayerH03: TGIS_LayerVector;
+    // 每个场馆当前激活的图层   var     ttkSQLayer: TGIS_LayerSqlDbx;
+    ttkLayerH01, ttkLayerH02, ttkLayerH03: TGIS_LayerSqlDbx; // TGIS_LayerVector;
     sLayerName: string; // 切换图层的名称，从HINT中链接而成
     procedure ttkAddLayer(const ALayerName: string; AVisible: Boolean = False; const AStyleName: string = '');
     function RotaryMenuDialogStaus(AdvRotaryMenuDialog: TAdvSmoothRotaryMenuDialog; ActiveItemIndex: Integer = -1): Integer;
@@ -142,6 +149,7 @@ type
     function GetLayerTableName(const AFeatureID: string; ATable: Boolean = True): string; // 根据要素编号获取 所在图层的表名称
     procedure ChangeLayer(const ALayerName: string); // 激活图层，同时隐藏同馆的其他图层
     function GetCurrentLayer(AttkPoint: TGIS_Point): string; // 获取鼠标所在场馆图层名
+
   end;
 
 var
@@ -152,11 +160,13 @@ implementation
 {$R *.dfm}
 
 
-uses UnitDBM, UnitMeta, UnitQuery, UnitFind;
+uses UnitDBM, UnitMeta, UnitQuery, UnitFind, UnitDatum, UnitAddDevice;
 
 var
   formQuery: TFormQuery;
   formFind: TFormFind;
+  formDatum: TFormDatum;
+  formAddDevice: TFormAddDevice;
 
 procedure TFormMain.OnPaintShapeLabel(const Sender: TObject; const shape: TGIS_Shape);
 begin
@@ -235,6 +245,66 @@ begin
   ttkViewer.Update;
 end;
 
+procedure TFormMain.AdvMetroButton2Click(Sender: TObject);
+begin
+  if SavePictureDialog1.Execute then
+  begin
+    ttkViewer.ExportToImage(SavePictureDialog1.FileName, ttkViewer.VisibleExtent,
+      1024, 1024, 100, 0, 96);
+  end;
+end;
+
+procedure TFormMain.AdvMetroButton3Click(Sender: TObject);
+var
+  styleList: TStringList;
+begin
+  DM.FDQstyle.Close;
+  if AdvMetroButton3.Down then
+  begin
+    DM.FDQstyle.ParamByName('styleName').AsString := 'SYESNO';
+  end
+  else
+  begin
+    DM.FDQstyle.ParamByName('styleName').AsString := 'SLJS';
+  end;
+  DM.FDQstyle.Open;
+
+  styleList := TStringList.Create;
+  styleList.Text := DM.FDQstyle.FieldByName('style_data').AsString;
+  // ttkLayerH01.ParamsList.LoadFromFile('L010201.ini');
+  // ttkLayerH01.ParamsList.Clear;
+  // ttkLayerH02.ParamsList.Clear;
+  ttkLayerH01.ParamsList.LoadFromStrings(styleList);
+  ttkLayerH02.ParamsList.LoadFromStrings(styleList);
+  ttkViewer.Update;
+  // AdvMetroButton4.Down := not  AdvMetroButton4.Down;
+end;
+
+procedure TFormMain.AdvMetroButton4Click(Sender: TObject);
+var
+  ttkSQLayer: TGIS_LayerSqlDbx;
+  styleList: TStringList;
+begin
+  DM.FDQstyle.Close;
+  if AdvMetroButton4.Down then
+  begin
+    DM.FDQstyle.ParamByName('styleName').AsString := 'SZONE';
+  end
+  else
+  begin
+    DM.FDQstyle.ParamByName('styleName').AsString := 'SLJS';
+  end;
+  DM.FDQstyle.Open;
+
+  styleList := TStringList.Create;
+  styleList.Text := DM.FDQstyle.FieldByName('style_data').AsString;
+  // ttkLayerH01.ParamsList.LoadFromFile('L010201.ini');
+  ttkLayerH01.ParamsList.LoadFromStrings(styleList);
+  ttkLayerH02.ParamsList.LoadFromStrings(styleList);
+  ttkViewer.Update;
+  // AdvMetroButton4.Down := not  AdvMetroButton4.Down;
+end;
+
 procedure TFormMain.AdvMetroButton6Click(Sender: TObject);
 begin
   AdvExpanderPanel1.Visible := not AdvExpanderPanel1.Visible;
@@ -252,7 +322,6 @@ end;
 
 procedure TFormMain.AdvMetroFormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
-
   ttkViewer.Close;
   DM.FDConn.Close;
   DM.GeoDBC.Close;
@@ -285,22 +354,22 @@ begin
   // ttkViewer.Color := RGB(244, 243, 240);
   // ttkViewer.Open('D:\DataBase\Map\东海水晶城\H01-3D\l0101.shp');
   // 加载图层
-  ttkAddLayer('L0101', True, '');
-  ttkAddLayer('L0201', True, '');
+  ttkAddLayer('L0101', True, 'SLJS');
+  ttkAddLayer('L0201', True, 'SLJS');
   ttkViewer.FullExtent;
-  ttkAddLayer('L0102');
-  ttkAddLayer('L0202');
-  ttkAddLayer('L0103');
-  ttkAddLayer('L0203');
-  ttkAddLayer('L0104');
-  ttkAddLayer('L0204');
+  ttkAddLayer('L0102', False, 'SLJS');
+  ttkAddLayer('L0202', False, 'SLJS');
+  ttkAddLayer('L0103', False, 'SLJS');
+  ttkAddLayer('L0203', False, 'SLJS');
+  ttkAddLayer('L0104', False, 'SLJS');
+  ttkAddLayer('L0204', False, 'SLJS');
 
   // 默认 场馆 激活的图层
-  ttkLayerH01 := ttkViewer.Get('L0101') as TGIS_LayerVector;
-  ttkLayerH02 := ttkViewer.Get('L0201') as TGIS_LayerVector;
+  ttkLayerH01 := ttkViewer.Get('L0101') as TGIS_LayerSqlDbx; // TGIS_LayerVector;
+  ttkLayerH02 := ttkViewer.Get('L0201') as TGIS_LayerSqlDbx; // TGIS_LayerVector;
 
-  ttkLayerH01.ParamsList.LoadFromFile('S1329058843.ini');
-  ttkLayerH02.ParamsList.LoadFromFile('S1329058843.ini'); // S1329598812.ini
+  // ttkLayerH01.ParamsList.LoadFromFile('S1329058843.ini');
+  // ttkLayerH02.ParamsList.LoadFromFile('S1329058843.ini'); // S1329598812.ini
   ttkViewer.Update;;
   //
 end;
@@ -345,6 +414,20 @@ begin
           formFind := TFormFind.Create(Self);
           formFind.Show;
         end;
+      end;
+
+    2: // 数据管理
+      begin
+        if Assigned(formDatum) then
+        begin
+          formDatum.Show;
+        end
+        else
+        begin
+          formDatum := TFormDatum.Create(Self);
+          formDatum.Show;
+        end;
+
       end;
   end;
 end;
@@ -391,6 +474,30 @@ begin
 
 end;
 
+procedure TFormMain.AdvSPopupButtonClick(Sender: TObject; Index: Integer);
+begin
+  case index of
+    0:
+      begin
+
+      end;
+    1:
+      begin
+        if Assigned(formAddDevice) then
+        begin
+        end
+        else
+        begin
+          formAddDevice := TFormAddDevice.Create(nil);
+        end;
+        formAddDevice.FeatureID := DBAdvEdit1.Text;
+        formAddDevice.UserName := AdvMetroButton8.Caption;
+        AdvSPopup.ClosePopup;
+        formAddDevice.Show;
+      end;
+  end;
+end;
+
 procedure TFormMain.AdvSPopupFooterClick(Sender: TObject);
 begin
   AdvSPopup.ClosePopup;
@@ -398,9 +505,9 @@ end;
 
 procedure TFormMain.ChangeLayer(const ALayerName: string);
 var
-  ttkLayer: TGIS_LayerVector;
+  ttkLayer: TGIS_LayerSqlDbx; // TGIS_LayerVector;
 begin
-  ttkLayer := ttkViewer.Get(ALayerName) as TGIS_LayerVector;
+  ttkLayer := ttkViewer.Get(ALayerName) as TGIS_LayerSqlDbx; // TGIS_LayerVector;
   case ALayerName.Chars[2] of // L0102 代表馆号，同一馆只有一个图层可见
     '1':
       begin
@@ -593,6 +700,7 @@ var
 begin
   Result := '';
   sFID := '[1-2]-[1-4]F-[A-G]-[0-9][0-9][0-9]'; // 1-1F-
+  sFID := '[1-2]-[1-4]F-*'; // 1-1F-
   if (TRegEx.IsMatch(AFeatureID, sFID)) then
   begin
     case AFeatureID.Chars[0] of
@@ -663,7 +771,7 @@ begin
       for I := 0 to ttkViewer.Items.Count - 1 do
       begin
         ttkLayer := ttkViewer.Items[I] as TGIS_LayerVector;
-        ttkLayer.ParamsList.LoadFromFile('S1329058843.ini');
+        // ttkLayer.ParamsList.LoadFromFile('S1329058843.ini');
         ttkLayer.Active := True;
       end;
 
@@ -850,9 +958,10 @@ begin
                     Get13PactInfo(sFeatureID);
 
                     AdvSPopup.HeaderCaption := sFeatureID;
-                    AdvSPopup.FooterCaption := X.ToString + '/' + xPoint.X.ToString +
-                      '/' + (AdvOfficePager1.Width + xPoint.X).ToString + '/' +
-                      Self.Width.ToString;
+                    AdvSPopup.FooterCaption := '中国东海水晶城';
+                    // X.ToString + '/' + xPoint.X.ToString +
+                    // '/' + (AdvOfficePager1.Width + xPoint.X).ToString + '/' +
+                    // Self.Width.ToString;
 
                     if (AdvOfficePager1.Width + xPoint.X) > Self.Width then
                     begin
@@ -875,8 +984,7 @@ begin
                 begin
                   ttkLayerH01.DeselectAll;
                   ttkLayerH02.DeselectAll;
-                  if ttkLayerH03 <> nil then
-                      ttkLayerH03.DeselectAll;
+                  if ttkLayerH03 <> nil then ttkLayerH03.DeselectAll;
                 end;
               end;
           end;

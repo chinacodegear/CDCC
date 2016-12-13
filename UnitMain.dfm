@@ -8,7 +8,7 @@ object FormMain: TFormMain
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = #20013#22269#19996#28023#27700#26230#22478' GIS '#31995#32479
   ClientHeight = 591
-  ClientWidth = 830
+  ClientWidth = 842
   Color = clWindow
   Constraints.MinHeight = 300
   Constraints.MinWidth = 100
@@ -42,7 +42,7 @@ object FormMain: TFormMain
   NoDropShadow = True
   Text = ''
   DesignSize = (
-    830
+    842
     591)
   PixelsPerInch = 96
   TextHeight = 13
@@ -438,7 +438,7 @@ object FormMain: TFormMain
   object AdvSmoothDock1: TAdvSmoothDock
     Left = 332
     Top = 17
-    Width = 333
+    Width = 378
     Height = 24
     AutoSize = False
     Fill.Color = 12184289
@@ -899,13 +899,12 @@ object FormMain: TFormMain
     TabOrder = 2
     ParentShowHint = False
     ShowHint = True
-    ExplicitWidth = 530
     TMSStyle = 2
   end
   object W7Panel1: TW7Panel
     Left = 0
     Top = 566
-    Width = 830
+    Width = 842
     Height = 25
     Margins.Left = 0
     Margins.Top = 0
@@ -930,10 +929,8 @@ object FormMain: TFormMain
     Align = alBottom
     ParentFont = False
     TabOrder = 4
-    ExplicitTop = 537
-    ExplicitWidth = 806
     object AdvMetroButton2: TAdvMetroButton
-      Left = 797
+      Left = 809
       Top = 0
       Width = 33
       Height = 25
@@ -964,10 +961,10 @@ object FormMain: TFormMain
       ShowHint = True
       TabOrder = 0
       Version = '1.1.2.0'
-      ExplicitLeft = 773
+      OnClick = AdvMetroButton2Click
     end
     object AdvMetroButton3: TAdvMetroButton
-      Left = 764
+      Left = 776
       Top = 0
       Width = 33
       Height = 25
@@ -1008,10 +1005,10 @@ object FormMain: TFormMain
       Style = tasCheck
       TabOrder = 1
       Version = '1.1.2.0'
-      ExplicitLeft = 740
+      OnClick = AdvMetroButton3Click
     end
     object AdvMetroButton4: TAdvMetroButton
-      Left = 698
+      Left = 710
       Top = 0
       Width = 33
       Height = 25
@@ -1058,10 +1055,10 @@ object FormMain: TFormMain
       Style = tasCheck
       TabOrder = 2
       Version = '1.1.2.0'
-      ExplicitLeft = 674
+      OnClick = AdvMetroButton4Click
     end
     object AdvMetroButton5: TAdvMetroButton
-      Left = 731
+      Left = 743
       Top = 0
       Width = 33
       Height = 25
@@ -1113,10 +1110,9 @@ object FormMain: TFormMain
       Style = tasCheck
       TabOrder = 3
       Version = '1.1.2.0'
-      ExplicitLeft = 707
     end
     object AdvSmoothComboBox1: TAdvSmoothComboBox
-      Left = 548
+      Left = 560
       Top = 0
       Width = 117
       Height = 30
@@ -1578,7 +1574,7 @@ object FormMain: TFormMain
       TMSStyle = 4
     end
     object AdvMetroButton6: TAdvMetroButton
-      Left = 665
+      Left = 677
       Top = 0
       Width = 33
       Height = 25
@@ -1624,7 +1620,6 @@ object FormMain: TFormMain
       TabOrder = 5
       Version = '1.1.2.0'
       OnClick = AdvMetroButton6Click
-      ExplicitLeft = 641
     end
     object AdvMetroButton7: TAdvMetroButton
       Left = 0
@@ -1639,7 +1634,7 @@ object FormMain: TFormMain
       Appearance.PictureColorDown = clNavy
       Appearance.PictureColorDisabled = 15907840
       Caption = ''
-      GroupIndex = 1
+      GroupIndex = 99
       Picture.Data = {
         89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
         87000003B7494441546843D55A4D52DB3014FE9E4B805D4D2E509881AEB94139
@@ -1676,6 +1671,27 @@ object FormMain: TFormMain
       TabOrder = 6
       Version = '1.1.2.0'
       OnClick = AdvMetroButton7Click
+    end
+    object AdvMetroButton8: TAdvMetroButton
+      Left = 100
+      Top = 0
+      Width = 67
+      Height = 25
+      Align = alLeft
+      Caption = #28023#27700#26230
+      TabOrder = 7
+      Version = '1.1.2.0'
+    end
+    object AdvMetroButton9: TAdvMetroButton
+      Left = 33
+      Top = 0
+      Width = 67
+      Height = 25
+      Align = alLeft
+      Caption = #24403#21069#29992#25143
+      Enabled = False
+      TabOrder = 8
+      Version = '1.1.2.0'
     end
   end
   object GIS_ControlLegend1: TGIS_ControlLegend
@@ -1715,10 +1731,9 @@ object FormMain: TFormMain
     BorderStyle = bsSingle
     Color = clBtnFace
     TabOrder = 6
-    ExplicitTop = 513
   end
   object GIS_ControlNorthArrow1: TGIS_ControlNorthArrow
-    Left = 783
+    Left = 795
     Top = 8
     Width = 39
     Height = 41
@@ -1734,7 +1749,7 @@ object FormMain: TFormMain
   object AdvOfficePager1: TAdvOfficePager
     Left = 19
     Top = 213
-    Width = 519
+    Width = 524
     Height = 215
     ActivePage = AdvOfficePager11
     AntiAlias = aaNone
@@ -2031,7 +2046,7 @@ object FormMain: TFormMain
     object AdvOfficePager11: TAdvOfficePage
       Left = 1
       Top = 26
-      Width = 517
+      Width = 522
       Height = 187
       Caption = #22522#26412#20449#24687
       DoubleBuffered = False
@@ -2476,7 +2491,7 @@ object FormMain: TFormMain
     object AdvOfficePager12: TAdvOfficePage
       Left = 1
       Top = 26
-      Width = 517
+      Width = 522
       Height = 187
       Caption = #35774#22791#20449#24687
       DoubleBuffered = False
@@ -2543,7 +2558,6 @@ object FormMain: TFormMain
         Height = 147
         PopupMenuParams.BuildMenuOnPopup = True
         PopupMenuParams.UseIndicatorMenu = True
-        AllowedOperations = []
         AutoFitColWidths = True
         ColumnDefValues.Title.Alignment = taCenter
         Ctl3D = False
@@ -2564,6 +2578,7 @@ object FormMain: TFormMain
             EditButtons = <>
             FieldName = 'DeviceName'
             Footers = <>
+            Width = 116
           end
           item
             Alignment = taCenter
@@ -2578,6 +2593,7 @@ object FormMain: TFormMain
             EditButtons = <>
             FieldName = 'DeviceType'
             Footers = <>
+            Width = 94
           end
           item
             Alignment = taCenter
@@ -2591,13 +2607,13 @@ object FormMain: TFormMain
       end
       object DBAdvNavigator1: TDBAdvNavigator
         Left = 473
-        Top = 23
-        Width = 20
-        Height = 145
-        AutoThemeAdapt = False
+        Top = 22
+        Width = 28
+        Height = 144
+        AutoThemeAdapt = True
         DataSource = DM.DS01
-        VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbRefresh]
-        Color = clBtnFace
+        VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
+        Color = clWhite
         ColorTo = clNone
         ColorDown = 14210002
         ColorDownTo = clNone
@@ -2607,7 +2623,9 @@ object FormMain: TFormMain
         InsertDisabled = False
         GlyphSize = gsSmall
         GlyphCustomSize = 0
+        Ctl3D = False
         Orientation = noVertical
+        ParentCtl3D = False
         TabOrder = 1
         Version = '1.3.1.2'
       end
@@ -2615,7 +2633,7 @@ object FormMain: TFormMain
     object AdvOfficePager13: TAdvOfficePage
       Left = 1
       Top = 26
-      Width = 517
+      Width = 522
       Height = 187
       Caption = #21512#21516#20449#24687
       DoubleBuffered = False
@@ -3096,7 +3114,7 @@ object FormMain: TFormMain
     object AdvOfficePage14: TAdvOfficePage
       Left = 1
       Top = 26
-      Width = 517
+      Width = 522
       Height = 187
       Badge = #27424
       Caption = #32564#36153#20449#24687
@@ -3157,13 +3175,13 @@ object FormMain: TFormMain
       TabAppearance.BackGround.ColorTo = clNone
       TabAppearance.BackGround.Direction = gdHorizontal
       DesignSize = (
-        517
+        522
         187)
       object DBGridEhFeePay: TDBGridEh
         Tag = 2
         Left = 67
         Top = 22
-        Width = 400
+        Width = 405
         Height = 148
         PopupMenuParams.BuildMenuOnPopup = True
         PopupMenuParams.UseGlobalMenu = True
@@ -3190,30 +3208,30 @@ object FormMain: TFormMain
         Columns = <
           item
             Alignment = taCenter
-            DisplayFormat = 'yyyy'#24180'mm'#26376'dd'#26085
+            DisplayFormat = 'yyyy/mm/dd'
             DynProps = <>
             EditButtons = <>
             FieldName = 'PayDate'
             Footers = <>
-            Width = 100
+            Width = 93
           end
           item
             Alignment = taCenter
-            DisplayFormat = 'yyyy'#24180'mm'#26376'dd'#26085
+            DisplayFormat = 'yyyy/mm/dd'
             DynProps = <>
             EditButtons = <>
             FieldName = 'FeeBegin'
             Footers = <>
-            Width = 110
+            Width = 96
           end
           item
             Alignment = taCenter
-            DisplayFormat = 'yyyy'#24180'mm'#26376'dd'#26085
+            DisplayFormat = 'yyyy/mm/dd'
             DynProps = <>
             EditButtons = <>
             FieldName = 'FeeEnd'
             Footers = <>
-            Width = 110
+            Width = 99
           end
           item
             Alignment = taCenter
@@ -3221,6 +3239,7 @@ object FormMain: TFormMain
             EditButtons = <>
             FieldName = 'Dues'
             Footers = <>
+            Width = 74
           end
           item
             Alignment = taCenter
@@ -3228,7 +3247,7 @@ object FormMain: TFormMain
             EditButtons = <>
             FieldName = 'PaidFee'
             Footers = <>
-            Width = 50
+            Width = 58
           end
           item
             Alignment = taCenter
@@ -3236,15 +3255,7 @@ object FormMain: TFormMain
             EditButtons = <>
             FieldName = 'Payee'
             Footers = <>
-            Width = 50
-          end
-          item
-            Alignment = taCenter
-            DynProps = <>
-            EditButtons = <>
-            FieldName = 'Recorder'
-            Footers = <>
-            Width = 50
+            Width = 58
           end
           item
             Alignment = taCenter
@@ -3258,7 +3269,7 @@ object FormMain: TFormMain
         end
       end
       object DBAdvNavigator2: TDBAdvNavigator
-        Left = 473
+        Left = 478
         Top = 23
         Width = 20
         Height = 145
@@ -3458,7 +3469,7 @@ object FormMain: TFormMain
     end
   end
   object AdvExpanderPanel1: TAdvSmoothExpanderPanel
-    Left = 631
+    Left = 643
     Top = 65
     Width = 191
     Height = 495
@@ -3504,7 +3515,7 @@ object FormMain: TFormMain
     TMSStyle = 4
     OldHeight = 495.000000000000000000
     object DBAdvSmoothListBox1: TDBAdvSmoothListBox
-      Left = 3
+      Left = -4
       Top = 83
       Width = 191
       Height = 409
@@ -3733,7 +3744,6 @@ object FormMain: TFormMain
       TabOrder = 0
       DataBinding.CaptionField = 'FeatureID'
       DataSource = DM.DSQuery
-      ExplicitHeight = 311
       TMSStyle = 4
     end
     object DBNavigator1: TDBNavigator
@@ -3745,7 +3755,6 @@ object FormMain: TFormMain
       VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1
-      ExplicitWidth = 164
     end
   end
   object AdvSPopup: TAdvSmoothPopup
@@ -3758,12 +3767,28 @@ object FormMain: TFormMain
     InnerBorder = False
     ArrowPosition = paLeftCenter
     ArrowSize = 0
-    Buttons = <>
+    Buttons = <
+      item
+        Caption = #31614#21512#21516
+      end
+      item
+        Caption = #28155#35774#22791
+      end
+      item
+        Caption = #25220#30005#34920
+        Position = bpBottomRight
+      end
+      item
+        Caption = #32564#36153#29992
+        Position = bpBottomRight
+      end>
     ButtonFont.Charset = DEFAULT_CHARSET
     ButtonFont.Color = clWhite
     ButtonFont.Height = -11
     ButtonFont.Name = 'Tahoma'
     ButtonFont.Style = []
+    ButtonColor = clRed
+    OnButtonClick = AdvSPopupButtonClick
     OnFooterClick = AdvSPopupFooterClick
     HeaderCaption = 'Header'
     FooterCaption = 'Footer'
@@ -4165,8 +4190,8 @@ object FormMain: TFormMain
     DefaultDisabledFill.Glow = gmNone
     OnMenuItemClick = AdvSmoothRotaryMenuDialog2MenuItemClick
     OnClose = AdvSmoothRotaryMenuDialog2Close
-    Left = 310
-    Top = 125
+    Left = 309
+    Top = 146
     TMSStyle = 0
   end
   object AdvSmoothRotaryMenuDialog1: TAdvSmoothRotaryMenuDialog
@@ -4510,7 +4535,7 @@ object FormMain: TFormMain
     Left = 443
     Top = 155
     Bitmap = {
-      494C010101000800480030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000800700030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C00000003000000001002000000000000090
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -5704,5 +5729,11 @@ object FormMain: TFormMain
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000}
+  end
+  object SavePictureDialog1: TSavePictureDialog
+    DefaultExt = 'PNG'
+    Title = #20445#23384#22270#29255
+    Left = 388
+    Top = 469
   end
 end
