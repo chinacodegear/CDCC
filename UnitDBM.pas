@@ -109,6 +109,9 @@ type
     FDQaddDevice: TFDQuery;
     FDQdelDevice: TFDQuery;
     FDQstyle: TFDQuery;
+    FDQoweFee: TFDQuery;
+    FDQupdateOwe: TFDQuery;
+    FDQoweFeature: TFDQuery;
     procedure GeoDBCBeforeConnect(Sender: TObject);
     procedure FDConnBeforeConnect(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);

@@ -128,6 +128,8 @@ type
     procedure AdvMetroButton4Click(Sender: TObject);
     procedure AdvMetroButton2Click(Sender: TObject);
     procedure AdvMetroButton3Click(Sender: TObject);
+    procedure AdvMetroButton5Click(Sender: TObject);
+    procedure DBAdvSmoothListBox1FooterClick(Sender: TObject; X, Y: Integer);
   private
     procedure Get00Feature(sFeatureID: string);
     procedure Get01Devices(sFeatureID: string);
@@ -149,7 +151,8 @@ type
     function GetLayerTableName(const AFeatureID: string; ATable: Boolean = True): string; // 根据要素编号获取 所在图层的表名称
     procedure ChangeLayer(const ALayerName: string); // 激活图层，同时隐藏同馆的其他图层
     function GetCurrentLayer(AttkPoint: TGIS_Point): string; // 获取鼠标所在场馆图层名
-
+    procedure ClearOweInfo(); // 清空商铺的欠费状态
+    procedure AllOweInfo(); // 欠所有费用
   end;
 
 var
@@ -298,11 +301,52 @@ begin
 
   styleList := TStringList.Create;
   styleList.Text := DM.FDQstyle.FieldByName('style_data').AsString;
-  // ttkLayerH01.ParamsList.LoadFromFile('L010201.ini');
+
   ttkLayerH01.ParamsList.LoadFromStrings(styleList);
   ttkLayerH02.ParamsList.LoadFromStrings(styleList);
   ttkViewer.Update;
-  // AdvMetroButton4.Down := not  AdvMetroButton4.Down;
+  // ttkLayerH01.ParamsList.LoadFromFile('L010201.ini');
+end;
+
+procedure TFormMain.AdvMetroButton5Click(Sender: TObject);
+var
+  I, iCount: Integer;
+  sTabName, sFID: string;
+
+  styleList: TStringList;
+begin
+  // 刷新欠费状态
+  DM.FDQoweFee.Close;
+  DM.FDQoweFee.Open;
+  iCount := DM.FDQoweFee.RecordCount;
+  for I := 1 to iCount do
+  begin
+    sFID := DM.FDQoweFee.FieldByName('FeatureID').AsString;
+    sTabName := GetLayerTableName(sFID);
+    DM.FDQupdateOwe.ParamByName('FeatureID').AsString := sFID;
+    DM.FDQupdateOwe.MacroByName('TabName').AsRaw := sTabName;
+    DM.FDQupdateOwe.Execute;
+    DM.FDQoweFee.Next;
+  end;
+
+  DM.FDQstyle.Close;
+  if AdvMetroButton5.Down then
+  begin
+    DM.FDQstyle.ParamByName('styleName').AsString := 'SOWEFEE';
+  end
+  else
+  begin
+    DM.FDQstyle.ParamByName('styleName').AsString := 'SLJS';
+  end;
+  DM.FDQstyle.Open;
+
+  styleList := TStringList.Create;
+  styleList.Text := DM.FDQstyle.FieldByName('style_data').AsString;
+
+  ttkLayerH01.ParamsList.LoadFromStrings(styleList);
+  ttkLayerH02.ParamsList.LoadFromStrings(styleList);
+  ttkViewer.Update;
+
 end;
 
 procedure TFormMain.AdvMetroButton6Click(Sender: TObject);
@@ -503,6 +547,14 @@ begin
   AdvSPopup.ClosePopup;
 end;
 
+procedure TFormMain.AllOweInfo;
+begin
+  AdvOfficePage14.Badge := '欠';
+  AdvBadgeMetroTile1.Badge := '欠';
+  AdvBadgeMetroTile2.Badge := '欠';
+  AdvBadgeMetroTile3.Badge := '欠';
+end;
+
 procedure TFormMain.ChangeLayer(const ALayerName: string);
 var
   ttkLayer: TGIS_LayerSqlDbx; // TGIS_LayerVector;
@@ -532,6 +584,14 @@ begin
       end;
   end;
   ttkViewer.Update;
+end;
+
+procedure TFormMain.ClearOweInfo;
+begin
+  AdvOfficePage14.Badge := '';
+  AdvBadgeMetroTile1.Badge := '';
+  AdvBadgeMetroTile2.Badge := '';
+  AdvBadgeMetroTile3.Badge := '';
 end;
 
 procedure TFormMain.ClearSelection;
@@ -639,7 +699,7 @@ procedure TFormMain.CurvyEdit1Change(Sender: TObject);
 var
   sFID: string;
 begin
-  sFID := '[1-2]-[1-4]F-[A-G]-[0-9][0-9][0-9]';
+  sFID := '[1-2]-[1-4]F-[A-G]-[0-9][0-9][0-9]*';
   if (TRegEx.IsMatch(CurvyEdit1.Text, sFID)) then
   begin
     CurvyEdit1.Font.Color := clGreen;
@@ -650,6 +710,19 @@ begin
     CurvyEdit1.Font.Color := clRed;
     AdvMetroButton1.Enabled := False;
   end;;
+end;
+
+procedure TFormMain.DBAdvSmoothListBox1FooterClick(Sender: TObject; X, Y: Integer);
+begin
+  if DBAdvSmoothListBox1.Items.Count > 0 then
+  begin
+    ShowMessage('');
+  end
+  else
+  begin
+    ShowMessage('无有效商铺编号！');
+  end;
+
 end;
 
 procedure TFormMain.DBAdvSmoothListBox1ItemDblClick(Sender: TObject; ItemIndex: Integer);
@@ -920,6 +993,7 @@ var
   ttkPoint: TGIS_Point;
   sFeatureID: string;
   xPoint: TPoint;
+  I: Integer;
 begin
   if ttkViewer.IsEmpty then
       Exit;
@@ -956,6 +1030,51 @@ begin
                     Get01Devices(sFeatureID);
                     Get02PayFees(sFeatureID);
                     Get13PactInfo(sFeatureID);
+
+                    // 如果未租，则不欠费
+                    if ttkShape.GetField('FeatureStatus') = '未租' then ClearOweInfo
+                    else
+                    begin
+                      DM.FDQoweFeature.Close;
+                      DM.FDQoweFeature.Open('select featureid from t02payfees where featureid=' +
+                        QuotedStr(sFeatureID));
+                      // 如果已租，却没有缴费记录，则欠所有费用
+                      if DM.FDQoweFeature.RecordCount = 0 then AllOweInfo
+                      else
+                      begin
+                        DM.FDQoweFeature.Close;
+                        DM.FDQoweFeature.SQL.Text :=
+                          'select feekind from t02payfees where featureid=' +
+                          QuotedStr(sFeatureID) +
+                          'group by feekind having max(feeend)<getdate()';
+                        DM.FDQoweFeature.Open;
+
+                        if DM.FDQoweFeature.RecordCount = 0 then ClearOweInfo
+                        else
+                        begin
+                          AdvOfficePage14.Badge := '欠';
+                          for I := 1 to DM.FDQoweFeature.RecordCount do
+                          begin
+                            if DM.FDQoweFeature.FieldByName('feekind').AsString = '租金' then
+                            begin
+                              AdvBadgeMetroTile1.Badge := '欠';
+                              Continue;
+                            end;
+                            if DM.FDQoweFeature.FieldByName('feekind').AsString = '物业费' then
+                            begin
+                              AdvBadgeMetroTile2.Badge := '欠';
+                              Continue;
+                            end;
+                            if DM.FDQoweFeature.FieldByName('feekind').AsString = '电费' then
+                            begin
+                              AdvBadgeMetroTile3.Badge := '欠';
+                              Continue;
+                            end;
+                          end;
+                        end;
+                      end;
+
+                    end;
 
                     AdvSPopup.HeaderCaption := sFeatureID;
                     AdvSPopup.FooterCaption := '中国东海水晶城';

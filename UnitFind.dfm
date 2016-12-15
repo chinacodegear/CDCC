@@ -5,10 +5,12 @@ object FormFind: TFormFind
   BorderStyle = bsNone
   Caption = #21830#38138#36873#22336
   ClientHeight = 665
-  ClientWidth = 448
+  ClientWidth = 430
   Color = clWindow
   Constraints.MaxHeight = 768
   Constraints.MaxWidth = 485
+  Constraints.MinHeight = 26
+  Constraints.MinWidth = 100
   Ctl3D = False
   DefaultMonitor = dmMainForm
   DoubleBuffered = True

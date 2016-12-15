@@ -39,6 +39,7 @@ type
     AdvMetroTile3: TAdvMetroTile;
     AdvMetroTile5: TAdvMetroTile;
     AdvPackKind: TAdvComboBox;
+    AdvMetroTile1: TAdvMetroTile;
     procedure AdvMetroFormShow(Sender: TObject);
     procedure UnitAdvEditBtn1ClickBtn(Sender: TObject);
     procedure AdvMetroFormCreate(Sender: TObject);
@@ -148,7 +149,7 @@ begin
   AdvGroupBox2.CheckBox.Checked := False;
   AdvGroupBox3.CheckBox.Checked := False;
   Self.Width := 520;
-  Self.Height := 658;
+  Self.Height := 640;
 end;
 
 procedure TFormQuery.AdvMetroTile2Click(Sender: TObject);
@@ -160,6 +161,7 @@ end;
 
 procedure TFormQuery.AdvMetroTile3Click(Sender: TObject);
 begin
+  FormMain.DBAdvSmoothListBox1.Header.Caption := '查询结果';
   case AdvRGFee.ItemIndex of
     0: // 欠费商铺编号
       begin
@@ -167,7 +169,7 @@ begin
         DM.FDQuery4.SQL.Text :=
           'select featureid,feekind from t02payfees ' +
           'group by featureid ,feekind having max(feeend)<getdate() ' +
-          'order by featureid;';
+          'order by featureid';
         DM.FDQuery4.Open;
         DM.DSQuery.DataSet := DM.FDQuery4;
         FormMain.DBAdvSmoothListBox1.DataBinding.InfoField := 'feekind';
@@ -195,7 +197,7 @@ begin
           DM.FDQuery4.SQL.Text :=
             'select featureid,feekind from t02payfees ' +
             'group by featureid ,feekind having max(feeend)<:oweDate ' +
-            'order by featureid;';
+            'order by featureid';
 
           if AdvFeeBegin.Checked then DM.FDQuery4.ParamByName('oweDate').AsDate := AdvFeeBegin.Date;
           if AdvFeeEnd.Checked then DM.FDQuery4.ParamByName('oweDate').AsDate := AdvFeeEnd.Date;
@@ -314,9 +316,10 @@ end;
 procedure TFormQuery.SetButtonPanel;
 begin
   FormMain.AdvExpanderPanel1.Fill.BeginUpdate;
-  FormMain.AdvExpanderPanel1.Top := Self.Top;
-  FormMain.AdvExpanderPanel1.Left := Self.Left + Self.Width + 10;
-  FormMain.AdvExpanderPanel1.Height := Self.Height;
+  FormMain.DBAdvSmoothListBox1.Header.Caption := '查询结果';
+  // FormMain.AdvExpanderPanel1.Top := Self.Top;
+  // FormMain.AdvExpanderPanel1.Left := Self.Left + Self.Width + 10;
+  // FormMain.AdvExpanderPanel1.Height := Self.Height;
   FormMain.AdvExpanderPanel1.Visible := True;
   FormMain.AdvExpanderPanel1.Fill.EndUpdate;
 end;
@@ -367,6 +370,7 @@ begin
     FeatureStatus = :AFeatStatus
   }
   FormMain.DBAdvSmoothListBox1.DataBinding.InfoField := '';
+  FormMain.DBAdvSmoothListBox1.Header.Caption := '查询结果';
   DM.FDQuery2.Close;
   DM.FDQuery2.MacroByName('TableName').AsRaw := ATableName;
   DM.FDQuery2.MacroByName('FID').AsRaw := AFieldName; // 两个面积字段

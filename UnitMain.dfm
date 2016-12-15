@@ -391,7 +391,7 @@ object FormMain: TFormMain
     Font.Name = 'Tahoma'
     Font.Style = []
     ImeName = ''
-    MaxLength = 10
+    MaxLength = 11
     ParentFont = False
     Text = '1-2F-A-003'
     OnChange = CurvyEdit1Change
@@ -1110,6 +1110,7 @@ object FormMain: TFormMain
       Style = tasCheck
       TabOrder = 3
       Version = '1.1.2.0'
+      OnClick = AdvMetroButton5Click
     end
     object AdvSmoothComboBox1: TAdvSmoothComboBox
       Left = 560
@@ -1585,7 +1586,6 @@ object FormMain: TFormMain
       Appearance.PictureColorHover = clGreen
       Appearance.PictureColorDown = clRed
       Caption = ''
-      Down = True
       GroupIndex = 1
       Picture.Data = {
         89504E470D0A1A0A0000000D4948445200000020000000200806000000737A7A
@@ -1751,7 +1751,7 @@ object FormMain: TFormMain
     Top = 213
     Width = 524
     Height = 215
-    ActivePage = AdvOfficePager11
+    ActivePage = AdvOfficePage14
     AntiAlias = aaNone
     ButtonSettings.CloseButtonPicture.Data = {
       424DA20400000000000036040000280000000900000009000000010008000000
@@ -3470,7 +3470,7 @@ object FormMain: TFormMain
   end
   object AdvExpanderPanel1: TAdvSmoothExpanderPanel
     Left = 643
-    Top = 65
+    Top = 68
     Width = 191
     Height = 495
     Cursor = crDefault
@@ -3502,23 +3502,20 @@ object FormMain: TFormMain
     Fill.ShadowType = stBottom
     Fill.Glow = gmNone
     Version = '1.1.1.0'
-    Anchors = [akTop, akRight, akBottom]
+    Anchors = [akRight, akBottom]
     TabOrder = 9
     ExpanderColor = 16445929
     ExpanderDownColor = 15587527
     ExpanderHoverColor = 11196927
     ExpanderShape = esRounded
     MinimumPanelHeight = 23
-    DesignSize = (
-      191
-      495)
     TMSStyle = 4
     OldHeight = 495.000000000000000000
     object DBAdvSmoothListBox1: TDBAdvSmoothListBox
-      Left = -4
-      Top = 83
+      Left = 1
+      Top = 55
       Width = 191
-      Height = 409
+      Height = 427
       Cursor = crDefault
       Fill.Color = 16445929
       Fill.ColorTo = 15587527
@@ -3674,7 +3671,7 @@ object FormMain: TFormMain
       Header.Fill.Rounding = 0
       Header.Fill.ShadowOffset = 0
       Header.Fill.Glow = gmNone
-      Header.Caption = 'Header'
+      Header.Caption = #21830#38138#32534#21495
       Header.Font.Charset = DEFAULT_CHARSET
       Header.Font.Color = 7485192
       Header.Font.Height = -13
@@ -3699,7 +3696,6 @@ object FormMain: TFormMain
       Footer.Fill.Rounding = 0
       Footer.Fill.ShadowOffset = 0
       Footer.Fill.Glow = gmNone
-      Footer.Caption = 'Footer'
       Footer.Font.Charset = DEFAULT_CHARSET
       Footer.Font.Color = 7485192
       Footer.Font.Height = -13
@@ -3740,7 +3736,6 @@ object FormMain: TFormMain
       DefaultItem.ProgressMaximum = 100.000000000000000000
       SelectionMode = sPersistSelection
       Categories = <>
-      Anchors = [akLeft, akTop, akRight, akBottom]
       TabOrder = 0
       DataBinding.CaptionField = 'FeatureID'
       DataSource = DM.DSQuery
@@ -3748,12 +3743,12 @@ object FormMain: TFormMain
     end
     object DBNavigator1: TDBNavigator
       Left = 3
-      Top = 25
+      Top = 24
       Width = 184
       Height = 25
       DataSource = DM.DSQuery
       VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
-      Anchors = [akLeft, akTop, akRight]
+      ConfirmDelete = False
       TabOrder = 1
     end
   end
@@ -4535,7 +4530,7 @@ object FormMain: TFormMain
     Left = 443
     Top = 155
     Bitmap = {
-      494C010101000800700030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101010008007C0030003000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000C00000003000000001002000000000000090
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -5732,6 +5727,7 @@ object FormMain: TFormMain
   end
   object SavePictureDialog1: TSavePictureDialog
     DefaultExt = 'PNG'
+    FileName = #25130#22270
     Title = #20445#23384#22270#29255
     Left = 388
     Top = 469

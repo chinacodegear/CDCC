@@ -448,8 +448,9 @@ object DM: TDM
     UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
     SQL.Strings = (
-      'select FeatureID,GrossArea,UsableArea,RentPrice,'
-      'PropPrice,RentOff'
+      
+        'select FeatureID,GrossArea,UsableArea,RentPrice,PropPrice,RentOf' +
+        'f'
       'from T00Features '
       'where '
       'FeatureID like :FeatureID'
@@ -1357,5 +1358,59 @@ object DM: TDM
         ParamType = ptInput
         Value = Null
       end>
+  end
+  object FDQoweFee: TFDQuery
+    AutoCalcFields = False
+    Connection = FDConn
+    FetchOptions.AssignedValues = [evRecordCountMode]
+    FetchOptions.RecordCountMode = cmTotal
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
+    SQL.Strings = (
+      'select distinct featureid from t02payfees '
+      'group by featureid ,feekind having max(feeend)<getdate()'
+      'order by featureid')
+    Left = 624
+    Top = 309
+  end
+  object FDQupdateOwe: TFDQuery
+    CachedUpdates = True
+    Connection = FDConn
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvCountUpdatedRecords, uvCheckRequired, uvCheckReadOnly, uvCheckUpdatable, uvAutoCommitUpdates]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.CountUpdatedRecords = False
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.CheckReadOnly = False
+    UpdateOptions.CheckUpdatable = False
+    UpdateOptions.AutoCommitUpdates = True
+    SQL.Strings = (
+      'update &TabName set OweFee = 2 '
+      'where FeatureID = :FeatureID')
+    Left = 625
+    Top = 369
+    ParamData = <
+      item
+        Name = 'FEATUREID'
+        DataType = ftString
+        ParamType = ptInput
+        Value = Null
+      end>
+    MacroData = <
+      item
+        Value = Null
+        Name = 'TABNAME'
+      end>
+  end
+  object FDQoweFeature: TFDQuery
+    Connection = FDConn
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
+    Left = 626
+    Top = 236
   end
 end

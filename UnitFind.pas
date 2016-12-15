@@ -143,6 +143,7 @@ begin
     if AdvHallID.CheckBox.Checked then AFeatureID := AdvHallID.Hint;
     if AdvLayerID.CheckBox.Checked then AFeatureID := AFeatureID + AdvLayerID.Hint;
     if AdvZoneID.CheckBox.Checked then AFeatureID := AFeatureID + AdvZoneID.Hint;
+    // ShowMessage(AFeatureID);
   end
   else
   begin
@@ -360,6 +361,7 @@ end;
 procedure TFormFind.FindFeature;
 begin
   FormMain.DBAdvSmoothListBox1.DataBinding.InfoField := '';
+  FormMain.DBAdvSmoothListBox1.Header.Caption := '∫Ú—°…Ã∆Ã';
   DM.FDQFind.Close;
   DM.FDQFind.ParamByName('FeatureID').AsString := AFeatureID;
   DM.FDQFind.MacroByName('AreaFiled').AsRaw := AFieldArea;
